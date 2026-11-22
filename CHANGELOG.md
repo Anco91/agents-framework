@@ -4,6 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 
 ## [Unreleased]
 
+### Added
+- `.devin/blueprint.yaml`: Devin environment (shellcheck) and knowledge entries mirroring CI.
+- Root `AGENTS.md`: repository commands, ground rules and layout for coding agents.
+
 ## [1.0.0-rc.1] — 2026-11-22
 
 ### Added

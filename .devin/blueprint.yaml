@@ -1,0 +1,12 @@
+# Devin environment blueprint (git-backed).
+# Sync this file in Settings > Environment > Blueprints, then build a snapshot.
+initialize: |
+  sudo apt-get update && sudo apt-get install -y shellcheck
+
+knowledge:
+  - name: test
+    contents: |
+      bash tests/run.sh
+  - name: lint
+    contents: |
+      shellcheck init.sh framework/scripts/*.sh tests/*.sh && bash framework/scripts/lint-docs.sh

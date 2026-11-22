@@ -118,4 +118,6 @@ Code de référence prêt à copier, compilé dans un projet témoin :
 | `docs/design/` | Spec v4.1, plan, audit de la v3 |
 | `docs/decisions-log.md` | Décisions et leurs raisons |
 
-Tests : `bash tests/run.sh`. Lint de la doc : `bash framework/scripts/lint-docs.sh`.
+Tests : `bash tests/run.sh`. Lint shell : `shellcheck init.sh framework/scripts/*.sh tests/*.sh`.
+Lint de la doc : `bash framework/scripts/lint-docs.sh`. La CI exécute les trois sur Linux et macOS ;
+`.devin/blueprint.yaml` déclare les mêmes commandes pour Devin.
