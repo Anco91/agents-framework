@@ -2,10 +2,11 @@
 id: 03-charges-period-filter
 status: review
 branch: feat/03-charges-period-filter
-locked_at: 4f2c1a9
+locked_at: 9b7e3d2
 locked_tests:
   - packages/shared/src/domain/period.test.ts
   - packages/shared/src/filter/to-prisma-args.test.ts
+  - packages/shared/src/schemas/period.test.ts
 ---
 
 # 03 — Filter charges by period
