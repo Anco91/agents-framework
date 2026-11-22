@@ -9,17 +9,11 @@ a witness project (Zod 4, Prisma 6+, Next.js 16).
 // file: shared/filter/list-query.schema.ts
 import { z } from "zod";
 
-const operators = <T extends z.ZodType>(value: T) =>
-  z
-    .object({
-      eq: value,
-      not: value,
-      in: z.array(value).max(100),
-      gte: value,
-      lte: value,
-      contains: z.string().min(1),
-    })
-    .partial();
+const operators = <T extends z.ZodType>(value: T) => {
+  const base = z.object({ eq: value, not: value, in: z.array(value).max(100), gte: value, lte: value });
+  // `contains` is a substring match: only offered on string fields.
+  return (value instanceof z.ZodString ? base.extend({ contains: z.string().min(1) }) : base).partial();
+};
 
 type FieldFilters<S extends Record<string, z.ZodType>> = {
   [K in keyof S]: z.ZodOptional<ReturnType<typeof operators<S[K]>>>;
@@ -147,8 +141,14 @@ import { ConflictError, NotFoundError } from "./errors";
 
 const body = (code: string, message: string, details?: unknown) => ({ error: { code, message, details } });
 
+// Prisma "record not found" (update/delete on a missing id), matched by code to avoid importing the client.
+const isPrismaNotFound = (error: unknown) =>
+  typeof error === "object" && error !== null && "code" in error && error.code === "P2025";
+
 export const toHttpError = (error: unknown) => {
   if (error instanceof ZodError) return NextResponse.json(body("validation", "Invalid input", error.issues), { status: 400 });
+  if (error instanceof SyntaxError) return NextResponse.json(body("validation", "Malformed JSON"), { status: 400 });
+  if (isPrismaNotFound(error)) return NextResponse.json(body("not_found", "Record not found"), { status: 404 });
   if (error instanceof NotFoundError) return NextResponse.json(body(error.code, error.message), { status: 404 });
   if (error instanceof ConflictError) return NextResponse.json(body(error.code, error.message), { status: 409 });
   console.error(error);
