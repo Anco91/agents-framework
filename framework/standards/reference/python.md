@@ -82,6 +82,7 @@ Cursor by `id` works with `id` ordering; with another sort key use a keyset `(ke
 import json
 
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import ValidationError
 
 from ..filter.list_query import ListQuery
 
@@ -91,7 +92,11 @@ def crud_router(prefix: str, service, create_model: type, update_model: type) ->
 
     @router.get("")
     def find_many(q: str = Query(default="{}")):
-        return service.find_many(ListQuery.model_validate(json.loads(q)))
+        try:
+            query = ListQuery.model_validate(json.loads(q))
+        except (json.JSONDecodeError, ValidationError) as error:
+            raise HTTPException(422, f"invalid list query: {error}") from error
+        return service.find_many(query)
 
     @router.get("/{item_id}")
     def find_by_id(item_id: str):
