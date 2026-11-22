@@ -171,11 +171,12 @@ error at the same place. Labels come from props (i18n-ready).
 
 Usage — a whole form:
 ```tsx
-<Form schema={chargeCreateSchema} defaultValues={{ label: "", amountCents: 0 }} onSubmit={create.mutateAsync}>
+<Form schema={chargeCreateSchema} defaultValues={{ label: "", amountCents: 0, dueDate: new Date() }} onSubmit={create.mutateAsync}>
   <FormTitle>New charge</FormTitle>
   <FormFields>
     <TextField name="label" label="Label" />
     <NumberField name="amountCents" label="Amount" />
+    <DateField name="dueDate" label="Due date" />
   </FormFields>
   <FormActions mode="create" onCancel={close} />
 </Form>
