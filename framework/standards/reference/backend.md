@@ -17,7 +17,7 @@ const isStringSchema = (schema: z.core.$ZodType): boolean => {
 };
 
 const operators = <T extends z.ZodType>(value: T) => {
-  const base = z.object({ eq: value, not: value, in: z.array(value).max(100), gte: value, lte: value });
+  const base = z.strictObject({ eq: value, not: value, in: z.array(value).max(100), gte: value, lte: value });
   // `contains` is a substring match: only offered on string fields.
   return (isStringSchema(value) ? base.extend({ contains: z.string().min(1) }) : base).partial();
 };
