@@ -349,7 +349,7 @@ create_project_file() {
     printf 'unchanged  %s\n' "$relative_path"
     return 0
   fi
-  copy_atomic "$source_file" "$destination"
+  copy_atomic "$source_file" "$destination" || return 1
   printf 'created  %s\n' "$relative_path"
 }
 
@@ -358,8 +358,8 @@ create_project_files() {
     error "cannot create project directories"
     return 1
   }
-  create_project_file "$FRAMEWORK_DIR/templates/ARCHITECTURE.md" "ARCHITECTURE.md"
-  create_project_file "$FRAMEWORK_DIR/templates/SPEC_MASTER.md" "specs/SPEC_MASTER.md"
+  create_project_file "$FRAMEWORK_DIR/templates/ARCHITECTURE.md" "ARCHITECTURE.md" || return 1
+  create_project_file "$FRAMEWORK_DIR/templates/SPEC_MASTER.md" "specs/SPEC_MASTER.md" || return 1
   if [ -e "$PROJECT/docs/handoffs/.gitkeep" ]; then
     printf 'unchanged  docs/handoffs/.gitkeep\n'
   else

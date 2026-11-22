@@ -29,6 +29,21 @@ if "$ROOT/init.sh" install "$TEST_ROOT" --unknown >"$TEST_ROOT/unknown.out" 2>&1
 fi
 assert_file_contains "$TEST_ROOT/unknown.out" 'usage:'
 
+if [ "$(id -u)" -ne 0 ]; then
+  project="$TEST_ROOT/unwritable-specs"
+  mkdir -p "$project/specs"
+  chmod 555 "$project/specs"
+  if "$ROOT/init.sh" install "$project" >"$TEST_ROOT/unwritable-specs.out" 2>&1; then
+    chmod 755 "$project/specs"
+    fail "install succeeded with an unwritable specs directory"
+  fi
+  chmod 755 "$project/specs"
+  case "$(cat "$TEST_ROOT/unwritable-specs.out")" in
+    *'created  specs/SPEC_MASTER.md'*) fail "reported a project file created after copy failure" ;;
+  esac
+  assert_no_file "$project/specs/SPEC_MASTER.md"
+fi
+
 project="$TEST_ROOT/empty"
 mkdir "$project"
 "$ROOT/init.sh" install "$project" >"$TEST_ROOT/install.out"
