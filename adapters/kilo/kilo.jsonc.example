@@ -1,0 +1,11 @@
+// check slugs and prices on openrouter.ai
+{
+  "agent": {
+    "agents-fw-advisor": {
+      "model": "<advisor-model-from-openrouter>"
+    },
+    "agents-fw-executor": {
+      "model": "<executor-model-from-openrouter>"
+    }
+  }
+}

@@ -7,13 +7,79 @@ START_MARKER='<!-- agents-fw:start -->'
 END_MARKER='<!-- agents-fw:end -->'
 PROJECT=''
 MANIFEST_TMP=''
+HOSTS=''
+OLD_HOSTS=''
+NORMALIZED_HOSTS=''
+HOSTS_SPECIFIED=0
+HOST_STAGE_DIR=''
 
 error() {
   printf '%s\n' "$*" >&2
 }
 
 usage() {
-  error "usage: init.sh install|update <project> [--force]"
+  error "usage: init.sh install|update <project> [--force] [--host <list>] | init.sh hosts"
+}
+
+normalize_host_list() {
+  host_input=$1
+  normalized_hosts=''
+  [ -n "$host_input" ] || return 1
+  remaining_hosts=$host_input
+  while :; do
+    host_name=${remaining_hosts%%,*}
+    case "$host_name" in
+      claude|kilo|aider|skills) ;;
+      *) return 1 ;;
+    esac
+    case " $normalized_hosts " in
+      *" $host_name "*) return 1 ;;
+    esac
+    if [ -n "$normalized_hosts" ]; then
+      normalized_hosts="$normalized_hosts $host_name"
+    else
+      normalized_hosts=$host_name
+    fi
+    [ "$remaining_hosts" != "$host_name" ] || break
+    remaining_hosts=${remaining_hosts#*,}
+  done
+  NORMALIZED_HOSTS=$normalized_hosts
+}
+
+host_is_selected() {
+  case " $HOSTS " in
+    *" $1 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+host_list_csv() {
+  csv_hosts=''
+  remaining_hosts=$HOSTS
+  while [ -n "$remaining_hosts" ]; do
+    host_name=${remaining_hosts%% *}
+    if [ -n "$csv_hosts" ]; then
+      csv_hosts="$csv_hosts,$host_name"
+    else
+      csv_hosts=$host_name
+    fi
+    [ "$remaining_hosts" != "$host_name" ] || break
+    remaining_hosts=${remaining_hosts#* }
+  done
+  printf '%s\n' "$csv_hosts"
+}
+
+extract_procedure_description() {
+  awk '
+    /^Use when: / {
+      value = substr($0, 11)
+      sub(/\. Role:.*/, "", value)
+      print value
+      found = 1
+      exit
+    }
+    END { if (!found) exit 1 }
+  ' "$1"
 }
 
 sha256() {
@@ -89,12 +155,63 @@ check_path_links() {
   done
 }
 
-list_managed_pairs() {
+list_framework_pairs() {
   find "$FRAMEWORK_DIR" -type f -print 2>/dev/null | LC_ALL=C sort |
     while IFS= read -r source_file; do
       relative_file=${source_file#"$FRAMEWORK_DIR"/}
       printf '%s\t.agents-fw/%s\n' "$source_file" "$relative_file"
     done
+}
+
+list_static_host_pairs() {
+  remaining_hosts=$HOSTS
+  while [ -n "$remaining_hosts" ]; do
+    host_name=${remaining_hosts%% *}
+    case "$host_name" in
+      claude)
+        printf '%s\tCLAUDE.md\n' "$SCRIPT_DIR/adapters/claude/CLAUDE.md"
+        ;;
+      kilo)
+        printf '%s\t.kilo/agents/agents-fw-advisor.md\n' "$SCRIPT_DIR/adapters/kilo/agents-fw-advisor.md"
+        printf '%s\t.kilo/agents/agents-fw-executor.md\n' "$SCRIPT_DIR/adapters/kilo/agents-fw-executor.md"
+        printf '%s\t.agents-fw/adapters/kilo/kilo.jsonc.example\n' "$SCRIPT_DIR/adapters/kilo/kilo.jsonc.example"
+        ;;
+      aider)
+        printf '%s\t.aider.conf.yml\n' "$SCRIPT_DIR/adapters/aider/.aider.conf.yml"
+        ;;
+    esac
+    [ "$remaining_hosts" != "$host_name" ] || break
+    remaining_hosts=${remaining_hosts#* }
+  done
+}
+
+list_host_pairs() {
+  list_static_host_pairs
+  if host_is_selected skills; then
+    while IFS= read -r source_file; do
+      relative_file=${source_file#"$HOST_STAGE_DIR"/}
+      printf '%s\t.agents/%s\n' "$source_file" "$relative_file"
+    done < <(find "$HOST_STAGE_DIR/skills" -type f -name SKILL.md -print 2>/dev/null | LC_ALL=C sort)
+  fi
+}
+
+list_managed_pairs() {
+  {
+    list_framework_pairs
+    list_host_pairs
+  } | LC_ALL=C sort -t "$(printf '\t')" -k 2,2
+}
+
+print_hosts() {
+  printf 'claude: CLAUDE.md\n'
+  printf 'kilo: .kilo/agents/agents-fw-advisor.md, .kilo/agents/agents-fw-executor.md, .agents-fw/adapters/kilo/kilo.jsonc.example\n'
+  printf 'aider: .aider.conf.yml\n'
+  for procedure_file in "$FRAMEWORK_DIR"/procedures/*.md; do
+    [ -f "$procedure_file" ] || continue
+    procedure_name=${procedure_file##*/}
+    procedure_name=${procedure_name%.md}
+    printf 'skills: .agents/skills/agents-fw-%s/SKILL.md\n' "$procedure_name"
+  done
 }
 
 validate_sources() {
@@ -113,8 +230,8 @@ validate_sources() {
     error "cannot read version file"
     return 1
   }
-  pairs=$(list_managed_pairs)
-  [ -n "$pairs" ] || {
+  framework_pairs=$(list_framework_pairs)
+  [ -n "$framework_pairs" ] || {
     error "framework contains no managed files"
     return 1
   }
@@ -123,10 +240,11 @@ validate_sources() {
       error "framework source is missing or unreadable: $source_file"
       return 1
     fi
-  done <<< "$pairs"
+  done <<< "$framework_pairs"
 }
 
 validate_old_manifest() {
+  OLD_HOSTS=''
   manifest_path="$PROJECT/.agents-fw/MANIFEST"
   [ -e "$manifest_path" ] || return 0
   if [ ! -f "$manifest_path" ] || [ ! -r "$manifest_path" ]; then
@@ -138,8 +256,10 @@ validate_old_manifest() {
     return 1
   }
   first_line=1
+  manifest_line_number=0
   has_version=0
   while IFS= read -r manifest_line || [ -n "$manifest_line" ]; do
+    manifest_line_number=$((manifest_line_number + 1))
     if [ "$first_line" -eq 1 ]; then
       first_line=0
       case "$manifest_line" in
@@ -147,6 +267,19 @@ validate_old_manifest() {
         *) error "invalid manifest version line"; return 1 ;;
       esac
       continue
+    fi
+    if [ "$manifest_line_number" -eq 2 ]; then
+      case "$manifest_line" in
+        'hosts '*)
+          host_input=${manifest_line#hosts }
+          if ! normalize_host_list "$host_input"; then
+            error "invalid manifest hosts line"
+            return 1
+          fi
+          OLD_HOSTS=$NORMALIZED_HOSTS
+          continue
+          ;;
+      esac
     fi
     [ -n "$manifest_line" ] || continue
     case "$manifest_line" in
@@ -163,6 +296,78 @@ validate_old_manifest() {
     error "manifest version is missing"
     return 1
   }
+}
+
+validate_host_sources() {
+  host_pairs=$(list_static_host_pairs)
+  while IFS="$(printf '\t')" read -r source_file relative_path; do
+    [ -n "$source_file" ] || continue
+    if [ ! -f "$source_file" ] || [ ! -r "$source_file" ]; then
+      error "host source is missing or unreadable: $source_file"
+      return 1
+    fi
+    check_path_links "$relative_path" || return 1
+  done <<< "$host_pairs"
+  if host_is_selected skills; then
+    procedure_count=0
+    for procedure_file in "$FRAMEWORK_DIR"/procedures/*.md; do
+      [ -f "$procedure_file" ] || continue
+      if [ ! -r "$procedure_file" ]; then
+        error "procedure source is unreadable: $procedure_file"
+        return 1
+      fi
+      if ! extract_procedure_description "$procedure_file" >/dev/null; then
+        error "procedure is missing a Use when line: $procedure_file"
+        return 1
+      fi
+      procedure_name=${procedure_file##*/}
+      procedure_name=${procedure_name%.md}
+      check_path_links ".agents/skills/agents-fw-$procedure_name/SKILL.md" || return 1
+      procedure_count=$((procedure_count + 1))
+    done
+    [ "$procedure_count" -gt 0 ] || {
+      error "framework contains no procedures for skills"
+      return 1
+    }
+  fi
+}
+
+prepare_generated_skills() {
+  host_is_selected skills || return 0
+  stage_candidate="$PROJECT/.agents-fw/.host-stage.$$"
+  if [ -e "$stage_candidate" ] || [ -L "$stage_candidate" ]; then
+    error "host staging path already exists"
+    return 1
+  fi
+  HOST_STAGE_DIR=$stage_candidate
+  mkdir -p "$HOST_STAGE_DIR/skills" 2>/dev/null || {
+    error "cannot create host staging directory"
+    return 1
+  }
+  for procedure_file in "$FRAMEWORK_DIR"/procedures/*.md; do
+    [ -f "$procedure_file" ] || continue
+    procedure_description=$(extract_procedure_description "$procedure_file") || {
+      error "procedure is missing a Use when line: $procedure_file"
+      return 1
+    }
+    procedure_name=${procedure_file##*/}
+    procedure_name=${procedure_name%.md}
+    stage_file="$HOST_STAGE_DIR/skills/agents-fw-$procedure_name/SKILL.md"
+    mkdir -p "$(dirname "$stage_file")" 2>/dev/null || {
+      error "cannot create generated skill directory"
+      return 1
+    }
+    {
+      printf '%s\n' '---'
+      printf 'name: agents-fw-%s\n' "$procedure_name"
+      printf 'description: %s\n' "$procedure_description"
+      printf '%s\n\n' '---'
+      cat "$procedure_file"
+    } >"$stage_file" || {
+      error "cannot stage generated skill: $stage_file"
+      return 1
+    }
+  done
 }
 
 validate_managed_block() {
@@ -194,6 +399,9 @@ validate_managed_block() {
 cleanup() {
   if [ -n "$MANIFEST_TMP" ]; then
     rm -f "$MANIFEST_TMP" 2>/dev/null || true
+  fi
+  if [ -n "$HOST_STAGE_DIR" ]; then
+    rm -rf "$HOST_STAGE_DIR" 2>/dev/null || true
   fi
 }
 
@@ -463,6 +671,13 @@ write_manifest() {
     error "cannot prepare manifest"
     return 1
   }
+  if [ -n "$HOSTS" ]; then
+    hosts_csv=$(host_list_csv)
+    printf 'hosts %s\n' "$hosts_csv" >>"$MANIFEST_TMP" || {
+      error "cannot update manifest hosts"
+      return 1
+    }
+  fi
   while IFS="$(printf '\t')" read -r source_file relative_path; do
     destination="$PROJECT/$relative_path"
     source_hash=$(sha256 "$source_file") || return 1
@@ -488,6 +703,10 @@ write_manifest() {
 }
 
 main() {
+  if [ "$#" -eq 1 ] && [ "$1" = hosts ]; then
+    print_hosts
+    return 0
+  fi
   [ "$#" -ge 2 ] || {
     usage
     return 1
@@ -496,13 +715,38 @@ main() {
   project_arg=$2
   shift 2
   force=0
-  if [ "$#" -gt 0 ]; then
-    if [ "$#" -ne 1 ] || [ "$1" != '--force' ]; then
-      usage
-      return 1
-    fi
-    force=1
-  fi
+  HOSTS=''
+  OLD_HOSTS=''
+  HOSTS_SPECIFIED=0
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --force)
+        [ "$force" -eq 0 ] || {
+          usage
+          return 1
+        }
+        force=1
+        shift
+        ;;
+      --host)
+        if [ "$#" -lt 2 ] || [ "$HOSTS_SPECIFIED" -ne 0 ]; then
+          usage
+          return 1
+        fi
+        if ! normalize_host_list "$2"; then
+          usage
+          return 1
+        fi
+        HOSTS=$NORMALIZED_HOSTS
+        HOSTS_SPECIFIED=1
+        shift 2
+        ;;
+      *)
+        usage
+        return 1
+        ;;
+    esac
+  done
   case "$action" in
     install|update) ;;
     *) usage; return 1 ;;
@@ -521,13 +765,22 @@ main() {
     return 1
   fi
   validate_old_manifest || return 1
+  if [ "$HOSTS_SPECIFIED" -eq 0 ]; then
+    HOSTS=$OLD_HOSTS
+  fi
+  validate_host_sources || return 1
   validate_managed_block || return 1
   mkdir -p "$PROJECT/.agents-fw" 2>/dev/null || {
     error "cannot create .agents-fw"
     return 1
   }
   trap cleanup EXIT
+  prepare_generated_skills || return 1
   pairs=$(list_managed_pairs)
+  while IFS="$(printf '\t')" read -r source_file relative_path; do
+    [ -n "$relative_path" ] || continue
+    check_path_links "$relative_path" || return 1
+  done <<< "$pairs"
   while IFS= read -r source_directory; do
     relative_directory=${source_directory#"$FRAMEWORK_DIR"/}
     [ "$relative_directory" = "$source_directory" ] && continue
@@ -541,6 +794,9 @@ main() {
   write_managed_block || return 1
   create_project_files || return 1
   write_manifest || return 1
+  if host_is_selected kilo; then
+    printf 'Kilo model configuration example: .agents-fw/adapters/kilo/kilo.jsonc.example\n'
+  fi
 }
 
 main "$@"
