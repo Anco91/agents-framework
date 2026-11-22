@@ -55,7 +55,7 @@ in `queries/charges.server.ts` (import `server-only`).
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
-type PrefetchOptions = Parameters<QueryClient["prefetchQuery"]>[0];
+type PrefetchOptions = Pick<Parameters<QueryClient["prefetchQuery"]>[0], "queryKey">;
 
 export async function Guard({ queries, children }: { queries: PrefetchOptions[]; children: ReactNode }) {
   const queryClient = new QueryClient();
