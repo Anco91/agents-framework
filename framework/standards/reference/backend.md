@@ -9,10 +9,17 @@ a witness project (Zod 4, Prisma 6+, Next.js 16).
 // file: shared/filter/list-query.schema.ts
 import { z } from "zod";
 
+const isStringSchema = (schema: z.core.$ZodType): boolean => {
+  while (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
+    schema = schema.unwrap();
+  }
+  return schema instanceof z.ZodString;
+};
+
 const operators = <T extends z.ZodType>(value: T) => {
   const base = z.object({ eq: value, not: value, in: z.array(value).max(100), gte: value, lte: value });
   // `contains` is a substring match: only offered on string fields.
-  return (value instanceof z.ZodString ? base.extend({ contains: z.string().min(1) }) : base).partial();
+  return (isStringSchema(value) ? base.extend({ contains: z.string().min(1) }) : base).partial();
 };
 
 type FieldFilters<S extends Record<string, z.ZodType>> = {
