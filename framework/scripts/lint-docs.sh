@@ -103,6 +103,27 @@ markdown_files=$(find "$framework_dir" -type f -name '*.md' -print 2>/dev/null |
 while IFS= read -r markdown_file; do
   [ -n "$markdown_file" ] || continue
   links=$(awk '
+    function without_inline_code(line, output, position, character, run) {
+      output = ""
+      position = 1
+      while (position <= length(line)) {
+        character = substr(line, position, 1)
+        if (character == "`") {
+          run = 1
+          while (substr(line, position + run, 1) == "`") run++
+          if (inline_ticks == 0) {
+            inline_ticks = run
+          } else if (inline_ticks == run) {
+            inline_ticks = 0
+          }
+          position += run
+        } else {
+          if (inline_ticks == 0) output = output character
+          position++
+        }
+      }
+      return output
+    }
     function without_comments(line, open, close_pos, remainder) {
       while (1) {
         if (in_comment) {
@@ -124,7 +145,15 @@ while IFS= read -r markdown_file; do
       }
     }
     {
-      remainder = without_comments($0)
+      fence_candidate = $0
+      sub(/^[[:space:]]*/, "", fence_candidate)
+      if (substr(fence_candidate, 1, 3) == "```") {
+        in_fence = !in_fence
+        next
+      }
+      if (in_fence) next
+      remainder = without_inline_code($0)
+      remainder = without_comments(remainder)
       while (match(remainder, /\]\([^)]*\)/)) {
         link = substr(remainder, RSTART + 2, RLENGTH - 3)
         print FILENAME "\t" link

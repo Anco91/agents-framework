@@ -9,7 +9,16 @@ new_project
 
 framework="$TEST_ROOT/framework"
 mkdir -p "$framework/rules" "$framework/standards" "$framework/procedures" "$framework/templates"
-printf '# Core\n[link](target.md)\n[external](https://example.com) [anchor](#section)\n<!-- [ignored](absent.md) -->\n' >"$framework/core.md"
+cat >"$framework/core.md" <<'EOF'
+# Core
+[link](target.md)
+[external](https://example.com) [anchor](#section)
+<!-- [ignored](absent.md) -->
+```md
+[fenced](absent-fenced.md)
+```
+`[inline](absent-inline.md)`
+EOF
 printf 'target\n' >"$framework/target.md"
 printf '%s\n' '- **WF-1 MUST** — workflow rule.' >"$framework/rules/workflow.md"
 printf '%s\n' '- **ARCH-1 SHOULD** — architecture rule.' >"$framework/standards/architecture.md"
