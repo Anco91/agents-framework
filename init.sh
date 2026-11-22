@@ -465,8 +465,17 @@ write_manifest() {
   }
   while IFS="$(printf '\t')" read -r source_file relative_path; do
     destination="$PROJECT/$relative_path"
-    current_hash=$(sha256 "$destination") || return 1
-    printf '%s  %s\n' "$current_hash" "$relative_path" >>"$MANIFEST_TMP" || {
+    source_hash=$(sha256 "$source_file") || return 1
+    destination_hash=$(sha256 "$destination") || return 1
+    previous_hash=$(manifest_hash_for "$relative_path")
+    if [ "$force" -eq 1 ] || [ "$destination_hash" = "$source_hash" ]; then
+      manifest_hash=$source_hash
+    elif [ -n "$previous_hash" ]; then
+      manifest_hash=$previous_hash
+    else
+      continue
+    fi
+    printf '%s  %s\n' "$manifest_hash" "$relative_path" >>"$MANIFEST_TMP" || {
       error "cannot update manifest"
       return 1
     }

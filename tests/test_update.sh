@@ -26,6 +26,25 @@ assert_contains "$out" 'kept (.new)  .agents-fw/update-sample.md'
 assert_eq 'local edit' "$(cat "$project/.agents-fw/update-sample.md")" "preserved local edit"
 assert_eq 'source v2' "$(cat "$project/.agents-fw/update-sample.md.new")" "new upstream version"
 
+printf 'baseline v1\n' >"$source_repo/framework/manifest-baseline.md"
+"$source_repo/init.sh" update "$project" >/dev/null
+printf 'baseline local edit\n' >"$project/.agents-fw/manifest-baseline.md"
+printf 'baseline v2\n' >"$source_repo/framework/manifest-baseline.md"
+out=$("$source_repo/init.sh" update "$project")
+assert_contains "$out" 'kept (.new)  .agents-fw/manifest-baseline.md'
+assert_eq 'baseline local edit' "$(cat "$project/.agents-fw/manifest-baseline.md")" "preserved baseline edit"
+assert_eq 'baseline v2' "$(cat "$project/.agents-fw/manifest-baseline.md.new")" "first .new baseline"
+printf 'baseline v3\n' >"$source_repo/framework/manifest-baseline.md"
+out=$("$source_repo/init.sh" update "$project")
+assert_contains "$out" 'kept (.new)  .agents-fw/manifest-baseline.md'
+assert_eq 'baseline local edit' "$(cat "$project/.agents-fw/manifest-baseline.md")" "preserved baseline edit on retry"
+assert_eq 'baseline v3' "$(cat "$project/.agents-fw/manifest-baseline.md.new")" "refreshed .new baseline"
+rm "$source_repo/framework/manifest-baseline.md"
+out=$("$source_repo/init.sh" update "$project")
+assert_contains "$out" 'kept (modified, removed upstream)  .agents-fw/manifest-baseline.md'
+assert_eq 'baseline local edit' "$(cat "$project/.agents-fw/manifest-baseline.md")" "preserved edit after removal"
+rm -f "$project/.agents-fw/manifest-baseline.md.new"
+
 "$source_repo/init.sh" update "$project" --force >/dev/null
 assert_eq 'source v2' "$(cat "$project/.agents-fw/update-sample.md")" "forced update"
 rm -f "$project/.agents-fw/update-sample.md.new"
