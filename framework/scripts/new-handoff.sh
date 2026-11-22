@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eu
 
+script_dir=$(CDPATH='' cd -- "$(dirname "$0")" && pwd -P)
+
 error() {
   printf '%s\n' "$*" >&2
 }
@@ -76,7 +78,6 @@ case "$id" in
     ;;
 esac
 
-script_dir=$(CDPATH='' cd -- "$(dirname "$0")" && pwd -P)
 template="$script_dir/../templates/HANDOFF.md"
 if [ ! -f "$template" ] || [ ! -r "$template" ]; then
   error "handoff template is missing or unreadable"

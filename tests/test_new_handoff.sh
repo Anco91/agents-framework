@@ -32,6 +32,9 @@ case "$second" in
 esac
 assert_file "$project/$second"
 
+relative_created=$(cd "$ROOT" && framework/scripts/new-handoff.sh --root "$project" specs/example.md)
+assert_file "$project/$relative_created"
+
 printf 'No id metadata\n' >"$project/specs/fallback-name.md"
 fallback=$(cd "$project" && "$ROOT/framework/scripts/new-handoff.sh" specs/fallback-name.md)
 case "$fallback" in
