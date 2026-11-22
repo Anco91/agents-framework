@@ -382,29 +382,27 @@ update_existing_pair() {
   relative_path=$2
   destination=$3
   source_hash=$(sha256 "$source_file") || return 1
-  previous_hash=$(manifest_hash_for "$relative_path")
   destination_hash=$(sha256 "$destination") || return 1
-  if [ "$force" -eq 1 ]; then
-    if [ "$destination_hash" = "$source_hash" ]; then
-      status=unchanged
-    else
+  if [ "$destination_hash" = "$source_hash" ]; then
+    status=unchanged
+  elif [ "$force" -eq 1 ]; then
+    copy_atomic "$source_file" "$destination" || return 1
+    status=updated
+  else
+    previous_hash=$(manifest_hash_for "$relative_path")
+    if [ -n "$previous_hash" ] && [ "$destination_hash" = "$previous_hash" ]; then
       copy_atomic "$source_file" "$destination" || return 1
       status=updated
+    else
+      copy_atomic "$source_file" "$destination.new" || return 1
+      status='kept (.new)'
     fi
+  fi
+  if [ "$force" -eq 1 ]; then
     rm -f "$destination.new" 2>/dev/null || {
       error "cannot remove stale update file: $destination.new"
       return 1
     }
-  elif [ -n "$previous_hash" ] && [ "$destination_hash" = "$previous_hash" ]; then
-    if [ "$destination_hash" = "$source_hash" ]; then
-      status=unchanged
-    else
-      copy_atomic "$source_file" "$destination" || return 1
-      status=updated
-    fi
-  else
-    copy_atomic "$source_file" "$destination.new" || return 1
-    status='kept (.new)'
   fi
 }
 
@@ -441,11 +439,8 @@ remove_upstream_files() {
     esac
     pair_is_current "$old_path" && continue
     destination="$PROJECT/$old_path"
-    if [ -e "$destination" ]; then
-      destination_hash=$(sha256 "$destination") || return 1
-    else
-      destination_hash=$old_hash
-    fi
+    [ -e "$destination" ] || continue
+    destination_hash=$(sha256 "$destination") || return 1
     if [ "$destination_hash" = "$old_hash" ]; then
       rm -f "$destination" 2>/dev/null || {
         error "cannot remove upstream file: $old_path"

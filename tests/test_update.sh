@@ -28,6 +28,7 @@ assert_eq 'source v2' "$(cat "$project/.agents-fw/update-sample.md.new")" "new u
 
 "$source_repo/init.sh" update "$project" --force >/dev/null
 assert_eq 'source v2' "$(cat "$project/.agents-fw/update-sample.md")" "forced update"
+rm -f "$project/.agents-fw/update-sample.md.new"
 
 printf 'remove unchanged\n' >"$source_repo/framework/remove-sample.md"
 "$source_repo/init.sh" update "$project" >/dev/null
@@ -43,6 +44,15 @@ rm "$source_repo/framework/modified-remove.md"
 out=$("$source_repo/init.sh" update "$project")
 assert_contains "$out" 'kept (modified, removed upstream)  .agents-fw/modified-remove.md'
 assert_eq 'local retained' "$(cat "$project/.agents-fw/modified-remove.md")" "retained removed file"
+
+printf 'absent remove\n' >"$source_repo/framework/absent-remove.md"
+"$source_repo/init.sh" update "$project" >/dev/null
+rm "$project/.agents-fw/absent-remove.md"
+rm "$source_repo/framework/absent-remove.md"
+out=$("$source_repo/init.sh" update "$project")
+case "$out" in
+  *".agents-fw/absent-remove.md"*) fail "update reported an already-absent destination" ;;
+esac
 
 printf 'managed core v2\n' >"$source_repo/framework/core.md"
 printf 'outside before\n<!-- agents-fw:start -->\nold\n<!-- agents-fw:end -->\noutside after\n' >"$project/AGENTS.md"
@@ -68,6 +78,8 @@ assert_file "$project/docs/handoffs/keep.md"
 
 if [ "$(id -u)" -ne 0 ]; then
   cp "$manifest" "$TEST_ROOT/manifest.before"
+  printf 'partial update\n' >>"$source_repo/framework/core.md"
+  cp "$source_repo/framework/core.md" "$project/.agents-fw/core.md"
   chmod 000 "$source_repo/framework/update-sample.md"
   if "$source_repo/init.sh" update "$project" >"$TEST_ROOT/interrupted.out" 2>&1; then
     chmod 644 "$source_repo/framework/update-sample.md"
@@ -76,6 +88,8 @@ if [ "$(id -u)" -ne 0 ]; then
   cmp "$TEST_ROOT/manifest.before" "$manifest"
   chmod 644 "$source_repo/framework/update-sample.md"
   "$source_repo/init.sh" update "$project" >/dev/null
+  new_files=$(find "$project" -name '*.new' -print)
+  assert_eq '' "$new_files" "no .new files after interrupted update"
 fi
 
 assert_eq "1" "$(grep -cF '<!-- agents-fw:start -->' "$project/AGENTS.md")" "managed block count after update"
