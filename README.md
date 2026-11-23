@@ -6,6 +6,8 @@ OpenCode, Mistral Vibe, Antigravity…) sans dérive et sans brûler de tokens.
 Il industrialise une façon de produire du logiciel : mêmes principes, mêmes structures, mêmes
 composants dans chaque projet, pour que n'importe qui (humain ou agent) reprenne le code.
 
+Guide pas-à-pas : [`docs/guide-utilisation.md`](docs/guide-utilisation.md).
+
 ## Pourquoi
 
 Le coût d'un agent ne vient pas surtout du modèle, mais du **contexte** : à chaque appel d'outil,
@@ -116,6 +118,7 @@ Code de référence prêt à copier, compilé dans un projet témoin :
 | `framework/scripts/` | `test-lock.sh`, `arch-check.sh`, `new-handoff.sh`, `lint-docs.sh` |
 | `adapters/` | Fichiers par hôte |
 | `docs/design/` | Spec v4.1, plan, audit de la v3 |
+| `docs/guide-utilisation.md` | Guide d'installation et de workflow |
 | `docs/decisions-log.md` | Décisions et leurs raisons |
 
 Tests : `bash tests/run.sh`. Lint shell : `shellcheck init.sh framework/scripts/*.sh tests/*.sh`.

@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 
 ## [Unreleased]
 
+### Added
+- `docs/guide-utilisation.md`: installation, first sub-spec, Executor/Reviewer sessions, updates and troubleshooting.
+
 ## [1.0.0] — 2026-11-23
 
 ### Added
