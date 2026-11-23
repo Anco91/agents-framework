@@ -61,3 +61,22 @@ One entry per decision: what, why, evidence. Newest last.
 - Git trailers instead of a YAML change journal.
 - Targets new and existing projects; procedures also exposed as `.agents/skills/` (opt-in host).
 - Handoff after every delivered sub-spec and after ~30 conversation exchanges (thresholds tuned in pilot).
+
+## 2026-11-23 — M9 pilot (self-hosted, Q2 answered)
+
+- **Q2 answer (Anco)**: the framework targets both new and existing projects. This repository is the
+  existing-project pilot; `init.sh install` behaviour on an existing `AGENTS.md` is already covered by
+  `tests/test_install.sh`.
+- **Pilot target changed**: first attempt ran in `mbongo`, then was reverted (local branch only, no push)
+  and redone here. Reason: the framework repository is the intended self-hosted target. One wasted cycle.
+- **Self-hosting shape**: `ARCHITECTURE.md`, `specs/SPEC_MASTER.md`, one sub-spec, two handoffs. Scripts
+  run from `framework/scripts/`; no generated `.agents-fw/` copy is committed, to avoid drift.
+- **Sub-spec 01** — `lint-docs.sh` counted lines with `wc -l`, so a last line without a newline escaped
+  the budget. Fixed with `awk 'END { print NR }'`; locked test added.
+- **Executor measurements**: 6 files read, 1 file changed, 2 commands, 1 commit, 0 out-of-Frame reads,
+  0 locked-test edits, 0 `test-lock` or `arch-check` violations.
+- **Cost**: not measured. OpenRouter Activity was not available in this environment; per-role cost is
+  the only open M9 metric and needs an export covering the Advisor and Executor sessions.
+- **SES-2 thresholds**: kept at ~30 exchanges and ~40 tool calls. The Executor session stayed far below
+  both; lowering them would force handoffs inside one small slice.
+- **Release**: `VERSION` 1.0.0 after the pilot, with the `lint-docs` fix.

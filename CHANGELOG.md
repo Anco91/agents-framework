@@ -4,9 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-11-23
+
 ### Added
 - `.devin/blueprint.yaml`: Devin environment (shellcheck) and knowledge entries mirroring CI.
 - Root `AGENTS.md`: repository commands, ground rules and layout for coding agents.
+- Self-hosted spec workflow: `ARCHITECTURE.md` registry, `specs/SPEC_MASTER.md`, one sub-spec and
+  session handoffs under `docs/handoffs/`.
+
+### Fixed
+- `lint-docs.sh` line budgets counted an unterminated last line as absent; now counted with `awk`.
 
 ## [1.0.0-rc.1] — 2026-11-22
 
