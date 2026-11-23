@@ -61,6 +61,35 @@ fi
 assert_file_contains "$TEST_ROOT/budget.out" 'long.md'
 rm "$framework/procedures/long.md"
 
+i=0
+: >"$framework/procedures/unterminated.md"
+while [ "$i" -lt 81 ]; do
+  if [ "$i" -eq 0 ]; then
+    printf 'line' >>"$framework/procedures/unterminated.md"
+  else
+    printf '\nline' >>"$framework/procedures/unterminated.md"
+  fi
+  i=$((i + 1))
+done
+if "$ROOT/framework/scripts/lint-docs.sh" "$framework" >"$TEST_ROOT/unterminated.out" 2>&1; then
+  fail "lint-docs accepted an unterminated last line over the budget"
+fi
+assert_file_contains "$TEST_ROOT/unterminated.out" 'unterminated.md'
+rm "$framework/procedures/unterminated.md"
+
+i=0
+: >"$framework/procedures/unterminated-ok.md"
+while [ "$i" -lt 80 ]; do
+  if [ "$i" -eq 0 ]; then
+    printf 'line' >>"$framework/procedures/unterminated-ok.md"
+  else
+    printf '\nline' >>"$framework/procedures/unterminated-ok.md"
+  fi
+  i=$((i + 1))
+done
+"$ROOT/framework/scripts/lint-docs.sh" "$framework"
+rm "$framework/procedures/unterminated-ok.md"
+
 printf 'different block\n' >"$framework/procedures/handoff.md"
 if "$ROOT/framework/scripts/lint-docs.sh" "$framework" >"$TEST_ROOT/block.out" 2>&1; then
   fail "lint-docs accepted a different handoff block"
