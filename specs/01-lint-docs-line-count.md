@@ -1,9 +1,10 @@
 ---
 id: 01-lint-docs-line-count
-status: draft
+status: ready
 branch: feat/self-hosted-pilot
-locked_at:
-locked_tests: []
+locked_at: b687643
+locked_tests:
+  - tests/test_lint_docs.sh
 ---
 
 # 01 — Count the unterminated last line
