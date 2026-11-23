@@ -87,3 +87,4 @@ Proof of failure: `bash tests/test_lint_docs.sh` → `FAIL: lint-docs accepted a
 ## Handoffs
 
 <!-- Appended by new-handoff.sh users (SES-5): newest last. -->
+- `docs/handoffs/20261123-0107-01-lint-docs-line-count.md` — Advisor → Executor, test locked.
