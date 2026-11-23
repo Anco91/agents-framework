@@ -50,7 +50,7 @@ failed=0
 check_budget() {
   file=$1
   limit=$2
-  lines=$(wc -l <"$file" | tr -d '[:space:]')
+  lines=$(awk 'END { print NR }' "$file")
   if [ "$lines" -gt "$limit" ]; then
     error "line budget exceeded: $file ($lines > $limit)"
     failed=1
