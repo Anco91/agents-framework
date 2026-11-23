@@ -1,6 +1,6 @@
 ---
 id: 01-lint-docs-line-count
-status: ready
+status: done
 branch: feat/self-hosted-pilot
 locked_at: b687643
 locked_tests:
@@ -88,3 +88,4 @@ Proof of failure: `bash tests/test_lint_docs.sh` → `FAIL: lint-docs accepted a
 
 <!-- Appended by new-handoff.sh users (SES-5): newest last. -->
 - `docs/handoffs/20261123-0107-01-lint-docs-line-count.md` — Advisor → Executor, test locked.
+- `docs/handoffs/20261123-0108-01-lint-docs-line-count.md` — Executor → Advisor, delivered and verified.

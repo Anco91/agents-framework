@@ -34,4 +34,4 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 <!-- status: draft | ready | in-progress | review | done -->
 | # | Sub-spec | Outcome | Status | Last handoff |
 |---|---|---|---|---|
-| 01 | `specs/01-lint-docs-line-count.md` | Line budgets count an unterminated last line | ready | `docs/handoffs/20261123-0107-01-lint-docs-line-count.md` |
+| 01 | `specs/01-lint-docs-line-count.md` | Line budgets count an unterminated last line | done | `docs/handoffs/20261123-0108-01-lint-docs-line-count.md` |
