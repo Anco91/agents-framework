@@ -3,7 +3,7 @@ id: 03-session-gauge
 status: review
 branch: feat/m-c-session-gauge
 tier: small
-locked_at:
+locked_at: 7e85a95
 locked_tests:
   - tests/test_session_gauge.sh
 ---
