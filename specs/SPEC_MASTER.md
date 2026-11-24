@@ -41,5 +41,4 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | 05 | `specs/05-style-review.md` | Reviewer checks code against project house style and exemplars | done | `docs/handoffs/20261124-1436-05-style-review.md` |
 | 06 | `specs/06-adopt-existing.md` | `init.sh adopt`: replace existing rules/skills with the framework, with backup | done | — |
 | 07 | `specs/07-tool-policy.md` | Tool-order rule CTX-8; Claude `permissions.deny` and Context7 MCP examples installed beside the adapter | done | — |
-| 08 | `specs/08-architecture-changes-log.md` | Architecture changes log kept next to `ARCHITECTURE.md` | draft | — |
-| 09 | `specs/09-openspec-bridge.md` | Documentation-only bridge to OpenSpec; `init.sh` never calls `npx` | draft | — |
+| 09 | `specs/09-openspec-bridge.md` | Documentation-only bridge to OpenSpec; `init.sh` never calls `npx` | done | — |

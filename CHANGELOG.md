@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 
 ## [Unreleased]
 
+Sub-specs 02 to 07 and 09 are delivered; 08 was dropped (the Decisions table is the changes log).
+
 ### Added
 - CTX-8: tool order (registry, ranged read or LSP, folder-limited search, library docs). Claude host ships `settings.example.json` with `permissions.deny` and `mcp.example.json` (Context7) in `.agents-fw/adapters/claude/`; user config is never edited.
 - `init.sh adopt <project> [--host <list>] [--apply]`: dry-run plan, then backup to `.agents-fw/backup/<timestamp>/` and install; never deletes.
@@ -14,6 +16,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 - ROLE-10: House style section in `ARCHITECTURE.md`, "Style exemplars" in the Frame; the Reviewer blocks code that drifts from the project's style.
 - `core.md`: host global rules do not override TEST-1..3 or the role split.
 - `docs/guide-utilisation.md`: installation, first sub-spec, Executor/Reviewer sessions, updates and troubleshooting.
+- `docs/guide-utilisation.md`: section "Coexister avec OpenSpec" (09). Documentation only: `init.sh` never touches `openspec/` and never calls `npx`.
 
 ## [1.0.0] — 2026-11-23
 
