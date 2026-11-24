@@ -20,11 +20,22 @@ Git is the audit log. No side journal. Cite rules by ID.
   Why: `locked_at` points to a clean commit; reverts stay surgical.
 
 - **GIT-4 MUST** — Never push directly to the default branch, never merge with failing checks, never
-  rewrite shared history.
-  Why: the PR is where the human keeps control.
+  rewrite shared history. Work reaches the default branch only through a PR.
+  Why: the PR is the audit unit; CI is the gate.
 
 - **GIT-5 MUST** — Never commit secrets, `.env` files, API keys, or raw conversation dumps.
   Why: keys leak and get used; dumps are noise.
 
 - **GIT-6 SHOULD** — Delete the branch after merge; one open branch per active sub-spec.
   Why: stale branches hide which work is live.
+
+- **GIT-7 MUST** — The flow does not wait for the human. Commit, push, open the PR and merge it
+  yourself once all checks pass (and the Reviewer approved, when a review is due). Do not ask first.
+  Stop at the PR, state why, and wait for the human only for a human gate:
+  - a locked test changed, or `test-lock.sh` fails;
+  - auth, permissions, secrets or CI/deploy configuration changed;
+  - a file the agent or framework did not create is deleted or overwritten;
+  - a database migration or any irreversible data change;
+  - a line budget raised or a MUST rule changed (unless the human asked for that change);
+  - a release, tag or publish.
+  Why: routine delivery must not stall on approval; the human checks only what can hurt.

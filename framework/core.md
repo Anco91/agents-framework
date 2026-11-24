@@ -52,6 +52,8 @@ Then only the files of the sub-spec's Frame. Never list or search the whole work
   one form kit; no repeated inline JSX.
 - **Functions first** (ARCH-4): classes only for state with an invariant or a framework need.
 - **No model slugs, prices or keys** in project files (ROLE-6, GIT-5).
+- **Do not block the flow** (GIT-7): commit, push, PR and merge on green checks without asking. Stop
+  only at a human gate: locked tests, auth/secrets/CI config, deleting foreign files, migrations, MUST rules, releases.
 
 ## Handoff (SES-1..5)
 

@@ -20,4 +20,4 @@ Rules: WF-5, WF-6, CTX-3, GIT-5.
 
    Track: fast
    ```
-6. Push and open a PR (GIT-4). No YAML journal: `git log --grep "Track: fast"` is the audit.
+6. Push, open a PR, merge it when checks pass (GIT-4, GIT-7). No YAML journal: `git log --grep "Track: fast"` is the audit.

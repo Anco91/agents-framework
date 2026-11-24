@@ -8,6 +8,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 - Claude host: `agents-fw-executor` (sonnet), `agents-fw-executor-small` (haiku), `agents-fw-reviewer`;
   `tier: small|medium` in the sub-spec header; ROLE-9 (named agents only, no inherited strong model).
 - `session-gauge.sh` and a Claude PostToolUse hook snippet: warns `HANDOFF NOW` at the SES-2 tool-call limit; never blocks.
+- GIT-7: the agent commits, pushes, opens and merges its PR on green checks without asking; it stops only at a listed human gate.
 - `core.md`: host global rules do not override TEST-1..3 or the role split.
 - `docs/guide-utilisation.md`: installation, first sub-spec, Executor/Reviewer sessions, updates and troubleshooting.
 
