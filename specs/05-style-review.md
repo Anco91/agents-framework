@@ -34,3 +34,4 @@ The Reviewer can tell whether new code matches the project's own style and direc
 - Automatic style linting. Exemplars are registry paths, so `arch-check.sh` already catches a deleted exemplar.
 
 ## Handoffs
+- `docs/handoffs/20261124-1436-05-style-review.md`
