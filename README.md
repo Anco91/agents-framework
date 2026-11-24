@@ -36,6 +36,11 @@ git clone https://github.com/Anco91/agents-framework.git ~/agents-framework
 - Hôtes (`--host`) : `claude` (`CLAUDE.md`), `kilo` (`.kilo/agents/agents-fw-advisor.md`,
   `agents-fw-executor.md`), `aider` (`.aider.conf.yml`), `skills` (`.agents/skills/agents-fw-*`).
   `init.sh hosts` liste ce que chaque hôte reçoit. Détails et preuves : [`docs/hosts.md`](docs/hosts.md).
+- Projet qui a déjà des règles d'agent : `init.sh adopt /chemin/du/projet` affiche le plan ; `--apply`
+  déplace les anciens fichiers dans `.agents-fw/backup/<horodatage>/` (rien n'est supprimé), puis installe.
+- Hôte `claude` : exemples `settings.example.json` (`permissions.deny`) et `mcp.example.json` (Context7)
+  dans `.agents-fw/adapters/claude/`, à fusionner à la main ; le cadre ne touche jamais `settings.json`
+  ni `.mcp.json`. OpenSpec : `openspec/` n'est jamais modifié (guide, section « Coexister avec OpenSpec »).
 
 Mettre à jour :
 
@@ -115,7 +120,7 @@ Code de référence prêt à copier, compilé dans un projet témoin :
 | `framework/standards/` | ARCH, BE, FE, LIB, TypeScript, Python + code de référence |
 | `framework/procedures/` | Pas-à-pas : master spec, sous-spec, tests, exécution, revue, fast-track, handoff |
 | `framework/templates/` | SPEC_MASTER, SUB_SPEC, ARCHITECTURE, HANDOFF, PR |
-| `framework/scripts/` | `test-lock.sh`, `arch-check.sh`, `new-handoff.sh`, `lint-docs.sh` |
+| `framework/scripts/` | `test-lock.sh`, `arch-check.sh`, `new-handoff.sh`, `lint-docs.sh`, `session-gauge.sh` |
 | `adapters/` | Fichiers par hôte |
 | `docs/design/` | Spec v4.1, plan, audit de la v3 |
 | `docs/guide-utilisation.md` | Guide d'installation et de workflow |
