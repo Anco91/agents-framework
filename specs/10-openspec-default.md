@@ -1,9 +1,9 @@
 ---
 id: 10-openspec-default
-status: ready
+status: review
 branch: feat/10-openspec-default
 tier: medium
-locked_at:
+locked_at: b6120ca
 locked_tests:
   - tests/test_openspec_default.sh
 ---

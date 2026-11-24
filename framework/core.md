@@ -30,8 +30,9 @@ Then only the files of the sub-spec's Frame. Never list or search the whole work
 
 ## Workflow (WF-1..7)
 
-- Feature: master index → sub-spec (Advisor) → human validates → tests locked → Executor → review →
-  `ARCHITECTURE.md` updated → PR → handoff. One sub-spec = one branch = one PR = one session.
+- Feature (WF-9): OpenSpec by default: explore → propose (proposal, deltas, design, tasks) + `frame.md`
+  → tests locked → apply → review → archive → PR → handoff. A sub-spec is an OpenSpec change
+  (`openspec/changes/<id>/`); scripts take its `frame.md`. One change = one branch = one PR = one session.
 - Fast-track (WF-5): ≤ 3 files, no new module/public file/schema/migration/route/dependency, no
   business rule change, no locked test. Commit with trailer `Track: fast` (WF-6). Otherwise sub-spec.
 
@@ -71,7 +72,8 @@ Never compact a long session; hand off and start fresh (SES-6).
 | Need | Read |
 |---|---|
 | Write the master spec | `.agents-fw/procedures/write-master-spec.md` |
-| Write a sub-spec and its Frame | `.agents-fw/procedures/write-sub-spec.md` |
+| Spec a feature (OpenSpec, default) | `.agents-fw/procedures/openspec-flow.md` |
+| Frame content of a sub-spec | `.agents-fw/procedures/write-sub-spec.md` |
 | Write and lock tests | `.agents-fw/procedures/write-tests.md` |
 | Implement a sub-spec | `.agents-fw/procedures/execute.md` |
 | Review | `.agents-fw/procedures/review.md` |

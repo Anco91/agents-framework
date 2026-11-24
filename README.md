@@ -55,15 +55,16 @@ Un fichier du cadre modifié localement est conservé ; la nouvelle version arri
 ## Le workflow
 
 ```
-SPEC_MASTER.md (index)  →  specs/NN-slug.md (sous-spec + Cadre + tests verrouillés)
-      →  validation humaine  →  Executor  →  revue  →  ARCHITECTURE.md à jour  →  PR  →  handoff
+SPEC_MASTER.md (index)  →  change OpenSpec (proposal, deltas, design, tasks) + frame.md (Cadre, tests verrouillés)
+      →  Executor  →  revue  →  ARCHITECTURE.md à jour  →  PR  →  handoff
 ```
 
 1. **Advisor** (modèle fort, sessions courtes) : écrit la sous-spec et son **Cadre** — fichiers à
    créer (chemin, rôle, signatures), à modifier, liste de lecture, éléments à réutiliser,
    librairies, interdits — puis les **tests** de logique métier, qui échouent. Il les verrouille
    (`locked_tests`, `locked_at`).
-2. **Toi** : tu valides la sous-spec.
+2. **OpenSpec par défaut** : explorer → proposer → dérouler `tasks.md` → archiver, sans interruption
+   (`openspec/changes/<id>/`, voir `docs/guide-utilisation.md`).
 3. **Executor** (modèle Flash, pas cher) : nouvelle session, code uniquement dans le Cadre. Il peut
    proposer des tests (revus par l'Advisor), jamais modifier les tests verrouillés.
 4. **Revue** (autre famille de modèle) : `test-lock.sh`, `arch-check.sh`, conformité au Cadre.
