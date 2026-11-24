@@ -79,6 +79,9 @@ Sub-spec: specs/03-charges-period-filter.md (master: specs/SPEC_MASTER.md)
 First action: implement periodToRange in packages/shared/src/domain/period.ts
 ```
 
+**Équipe autonome** : un PM (`agents-fw-pm`) mène un kickoff par change, tranche lui-même avec
+l'option recommandée et ne s'arrête qu'aux portes GIT-7 (`framework/rules/autonomy.md`).
+
 Handoff obligatoire quand une sous-spec est livrée (commit + PR), et aussi après ~30 échanges,
 ~40 appels d'outils, 3 échecs identiques, un fichier hors Cadre ou un test qui semble faux.
 

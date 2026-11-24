@@ -13,8 +13,7 @@ A **sub-spec is an OpenSpec change**: `openspec/changes/<id>/`. Scripts take its
 | `tasks.md` | ordered checklist the Executor ticks |
 | `frame.md` | framework header (`id`, `status`, `tier`, `locked_at`, `locked_tests`) + Frame + Tests |
 
-No stop between steps: pick the recommended option and write it in `design.md`; the only stops are
-GIT-7 gates.
+No stop between steps: choices follow AUTO-1; the only stops are GIT-7 gates.
 
 1. **Bootstrap, once per project**: no `openspec/` folder → run `openspec init --tools <host>` (host
    `claude`, `kilo`, `codex`, `opencode`…; see `openspec init --help`). The CLI missing →
@@ -24,7 +23,8 @@ GIT-7 gates.
 2. **Explore** with the skill `openspec-explore` (or read the area per CTX-1..2). Output: findings in
    your head, nothing to approve.
 3. **Propose** with the skill `openspec-propose`: `proposal.md`, spec deltas, `design.md`, `tasks.md`.
-   `openspec validate <id>` must pass. One change = one vertical slice (WF-3).
+   `openspec validate <id>` must pass. One change = one vertical slice (WF-3). Then the PM holds the
+   kickoff (`kickoff.md`) and writes its decisions in `design.md`.
 4. **Frame**: copy `.agents-fw/templates/FRAME.md` to `openspec/changes/<id>/frame.md`; follow
    `write-sub-spec.md` steps 4-6 for the Frame content. Add a master row
    `openspec/changes/<id>/frame.md` in `specs/SPEC_MASTER.md`.
