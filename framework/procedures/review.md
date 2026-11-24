@@ -1,7 +1,7 @@
 # Review a sub-spec delivery
 
 Use when: a sub-spec PR is open (status `review`). Role: Reviewer, or Advisor in a fresh session.
-Rules: ROLE-5, GIT-2, every rule cited in the sub-spec.
+Rules: ROLE-5, ROLE-10, GIT-2, GIT-7, every rule cited in the sub-spec.
 
 1. Read `AGENTS.md`, `ARCHITECTURE.md`, the sub-spec, then the PR diff. Not the whole repo.
 2. Mechanical checks (run them):
@@ -18,7 +18,10 @@ Rules: ROLE-5, GIT-2, every rule cited in the sub-spec.
    - frontend: no fetch/derive effects (FE-3), state placement (FE-4), no repeated inline JSX (FE-9),
      form kit and structures used (FE-6, FE-7);
    - functions first, size, naming (ARCH-4, ARCH-5, ARCH-7).
-6. Executor-proposed tests: accept or reject each (`write-tests.md`).
-7. Write findings as a list `RULE-ID — file:line — problem — fix`. Blocking = MUST rules.
-8. Verdict: approve, or request changes with the list. Hand off to the Executor with the list as
-   "Left" if changes are needed.
+6. House style (ROLE-10): open the Frame's style exemplar and `ARCHITECTURE.md` > House style. For each
+   new or changed file compare structure, naming, error handling, imports, comments and layout. A gap
+   with no recorded reason is a blocking finding. Style missing from House style: add it to the list.
+7. Executor-proposed tests: accept or reject each (`write-tests.md`).
+8. Write findings as a list `RULE-ID — file:line — problem — fix`. Blocking = MUST rules.
+9. Verdict: approve, or request changes with the list. Hand off to the Executor with the list as
+   "Left" if changes are needed. On approval and green checks, merge (GIT-7).

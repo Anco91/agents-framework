@@ -24,6 +24,16 @@ Checked by `.agents-fw/scripts/arch-check.sh`.
 | Path | Kind | Purpose |
 |---|---|---|
 
+## House style
+
+<!-- The project's own style. The Executor copies it, the Reviewer checks it (ROLE-10). -->
+<!-- Exemplars are registry paths: 2 to 5 files that show how code is written here, one per layer. -->
+| Layer | Exemplar | What it shows |
+|---|---|---|
+
+<!-- Conventions the exemplars do not show: naming, error handling, file layout, comments, imports. -->
+- <convention>
+
 ## Libraries
 
 <!-- Retained libraries (LIB-1). Any addition needs a line in Decisions (LIB-3). -->
