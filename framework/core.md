@@ -25,6 +25,8 @@ Then only the files of the sub-spec's Frame. Never list or search the whole work
   `pending-review` for the Advisor. Never edits a locked test: stops and writes a test change request.
   Needs a file outside the Frame: stops and asks.
 - **Reviewer** is another model family; checks spec vs code, frame, test lock, registry.
+- **Tier** (ROLE-9): the sub-spec header says `tier: small|medium`. Dispatch only to the named
+  `agents-fw-*` agents, never to a built-in one that inherits the strong model.
 
 ## Workflow (WF-1..7)
 

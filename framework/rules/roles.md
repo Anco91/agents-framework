@@ -35,9 +35,10 @@ Three roles, defined by capability. One human validates. Cite rules by ID.
   Why: a model reviewing its own family's output shares its blind spots.
 
 - **ROLE-6 MUST** — Roles are configured by capability (reasoning, tool calling, structured output,
-  price), never by a model name written in the framework. Check every model slug, price and provider
-  on the provider's site (e.g. openrouter.ai) before configuring it.
-  Why: model names and prices change weekly; LLMs suggest obsolete or invented slugs.
+  price), never by a model slug written in the framework. A host's tier alias (`haiku`, `sonnet`) is
+  allowed in an agent file; a provider/model slug is not. Check every slug, price and provider on the
+  provider's site (e.g. openrouter.ai) before configuring it.
+  Why: model names and prices change weekly; LLMs suggest obsolete or invented slugs. Aliases track the tier.
 
 - **ROLE-7 SHOULD** — Use a local model or the editor's built-in completion for autocompletion.
   Never a paid chat model.
@@ -46,3 +47,9 @@ Three roles, defined by capability. One human validates. Cite rules by ID.
 - **ROLE-8 MUST** — When one model plays several roles (small project, single tool), it still switches
   explicitly: it ends the Advisor work with a commit and a handoff before acting as Executor.
   Why: the role boundary is what keeps tests and frame independent from the code.
+
+- **ROLE-9 MUST** — Dispatch work only to the named framework agents, never to a built-in agent that
+  inherits the parent model (`general-purpose`, `Plan`). The Advisor sets `tier: small|medium` in the
+  sub-spec header: `small` = one file or a mechanical change, `medium` = the rest. Check that
+  `CLAUDE_CODE_SUBAGENT_MODEL` is unset, since it can override an agent's `model:`.
+  Why: a sub-agent without an explicit model runs on the strong Advisor model and costs 5-10x more.

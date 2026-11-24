@@ -28,6 +28,9 @@ mkdir "$project"
 assert_file "$project/CLAUDE.md"
 assert_file_contains "$project/CLAUDE.md" '@AGENTS.md'
 assert_eq 'hosts claude' "$(sed -n '2p' "$project/.agents-fw/MANIFEST")" "Claude manifest hosts"
+assert_file_contains "$project/.claude/agents/agents-fw-executor.md" 'model: sonnet'
+assert_file_contains "$project/.claude/agents/agents-fw-executor-small.md" 'model: haiku'
+assert_file_contains "$project/.claude/agents/agents-fw-reviewer.md" 'model: sonnet'
 assert_no_file "$project/.aider.conf.yml"
 assert_no_file "$project/.kilo/agents/agents-fw-advisor.md"
 assert_no_file "$project/.agents/skills"

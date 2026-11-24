@@ -35,3 +35,4 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | # | Sub-spec | Outcome | Status | Last handoff |
 |---|---|---|---|---|
 | 01 | `specs/01-lint-docs-line-count.md` | Line budgets count an unterminated last line | done | `docs/handoffs/20261123-0108-01-lint-docs-line-count.md` |
+| 02 | `specs/02-agent-tiers.md` | Claude Executor/Reviewer agents with model tier aliases; `tier:` in sub-specs | in-progress | — |
