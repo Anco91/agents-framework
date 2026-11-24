@@ -281,6 +281,23 @@ ne crée ni ne modifie jamais `.claude/settings.json` ni `.mcp.json`. Fusion à 
 
 Kilo et Aider ne sont pas couverts par cette politique.
 
+## Coexister avec OpenSpec
+
+Un projet peut garder ses specs OpenSpec à côté du cadre. Le bloc géré injecté dans `AGENTS.md` ne
+touche jamais au dossier `openspec/` : `install` et `update` le laissent identique, octet par octet.
+
+`specs/SPEC_MASTER.md` peut pointer vers une spec OpenSpec quand une sous-spec s'appuie sur elle. Le
+cadre ne lit pas ces fichiers et ne les convertit pas en sous-specs.
+
+Les commandes OpenSpec (lancées avec `npx`, par exemple) sont exécutées par l'humain. `init.sh` ne
+lance jamais `npx` et ne déclenche aucune commande OpenSpec.
+
+Marche à suivre :
+
+1. Lancer les commandes OpenSpec du projet à la main, depuis la racine, comme d'habitude.
+2. Noter le chemin de la spec OpenSpec concernée dans `specs/SPEC_MASTER.md` ou dans la sous-spec.
+3. Lancer `init.sh update` si besoin ; le dossier `openspec/` ne change pas.
+
 ## 12. Protections de coût
 
 - Une clé OpenRouter par outil, avec plafond de crédit.
