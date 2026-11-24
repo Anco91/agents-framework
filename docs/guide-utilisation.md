@@ -283,20 +283,24 @@ Kilo et Aider ne sont pas couverts par cette politique.
 
 ## Coexister avec OpenSpec
 
-Un projet peut garder ses specs OpenSpec à côté du cadre. Le bloc géré injecté dans `AGENTS.md` ne
-touche jamais au dossier `openspec/` : `install` et `update` le laissent identique, octet par octet.
+OpenSpec est le format de spec **par défaut** (WF-9). Une sous-spec est un *change* OpenSpec :
+`openspec/changes/<id>/` contient `proposal.md`, les deltas `specs/`, `design.md` et `tasks.md`, plus un
+`frame.md` du cadre (en-tête `id`, `tier`, `locked_at`, `locked_tests`, Cadre, tests). Les scripts
+(`test-lock.sh`, `new-handoff.sh`) prennent le chemin de ce `frame.md`.
 
-`specs/SPEC_MASTER.md` peut pointer vers une spec OpenSpec quand une sous-spec s'appuie sur elle. Le
-cadre ne lit pas ces fichiers et ne les convertit pas en sous-specs.
+Le flux ne s'arrête pas : explorer, proposer, dérouler `tasks.md`, archiver
+(`.agents-fw/procedures/openspec-flow.md`). Les skills `openspec-*` viennent d'OpenSpec lui-même.
 
-Les commandes OpenSpec (lancées avec `npx`, par exemple) sont exécutées par l'humain. `init.sh` ne
-lance jamais `npx` et ne déclenche aucune commande OpenSpec.
+`init.sh` ne touche jamais au dossier `openspec/` et ne lance jamais `npx` : `install` et `update` le
+laissent identique, octet par octet. C'est l'agent (ou toi) qui initialise OpenSpec une fois par projet.
 
 Marche à suivre :
 
-1. Lancer les commandes OpenSpec du projet à la main, depuis la racine, comme d'habitude.
-2. Noter le chemin de la spec OpenSpec concernée dans `specs/SPEC_MASTER.md` ou dans la sous-spec.
-3. Lancer `init.sh update` si besoin ; le dossier `openspec/` ne change pas.
+1. Dans le projet : `openspec init --tools claude` (ou `npx -y @fission-ai/openspec@latest init --tools claude`).
+   Sans node, le cadre retombe sur le gabarit `SUB_SPEC.md` dans `specs/`.
+2. Dans `specs/SPEC_MASTER.md`, la colonne Sous-spec pointe vers `openspec/changes/<id>/frame.md`.
+3. Après `archive`, OpenSpec déplace le dossier vers `openspec/changes/archive/<date>-<id>/` : mettre à
+   jour le chemin du master dans le même commit. L'`id` ne change jamais.
 
 ## 12. Protections de coût
 

@@ -65,3 +65,10 @@ or in `ARCHITECTURE.md` > Decisions. **MAY** is an option. Cite rules by ID in r
 - **WF-8 SHOULD** — When the human asks for something outside the current sub-spec, add it as a new
   line in the master index instead of growing the current sub-spec.
   Why: scope creep is how sessions get long.
+
+- **WF-9 MUST** — OpenSpec is the default spec workflow. A sub-spec is an OpenSpec change
+  (`openspec/changes/<id>/`: `proposal.md`, spec deltas, `design.md`, `tasks.md`) plus a framework
+  `frame.md` with the header and the Frame. The flow explore → propose → tasks → apply → archive runs
+  without stopping (`procedures/openspec-flow.md`). Scripts take the `frame.md` path. Without node, the
+  plain `templates/SUB_SPEC.md` is the fallback.
+  Why: one clear, tool-supported path (explore, propose, tick tasks, archive) beats a home-made format.

@@ -42,3 +42,7 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | 06 | `specs/06-adopt-existing.md` | `init.sh adopt`: replace existing rules/skills with the framework, with backup | done | — |
 | 07 | `specs/07-tool-policy.md` | Tool-order rule CTX-8; Claude `permissions.deny` and Context7 MCP examples installed beside the adapter | done | — |
 | 09 | `specs/09-openspec-bridge.md` | Documentation-only bridge to OpenSpec; `init.sh` never calls `npx` | done | — |
+| 10 | `specs/10-openspec-default.md` | OpenSpec is the default spec workflow; sub-spec = change + `frame.md` | review | — |
+| 11 | — | Autonomous team: PM role, kickoff, no human choice prompts (AUTO) | draft | — |
+| 12 | — | `relay.sh`: start the next session from the latest handoff, headless | draft | — |
+| 13 | — | Terse chat replies, `caveman` skill loaded by default | draft | — |
