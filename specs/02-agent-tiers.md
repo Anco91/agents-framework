@@ -1,6 +1,6 @@
 ---
 id: 02-agent-tiers
-status: review
+status: done
 branch: feat/m-a-agent-tiers
 locked_at: 16d47e9
 locked_tests:
@@ -39,3 +39,5 @@ inherit the strong parent model. The Advisor picks `tier: small|medium` per sub-
 - Kilo model config (provider/model is a slug; stays a commented placeholder).
 
 ## Handoffs
+
+- `docs/handoffs/20261124-1315-02-agent-tiers.md`
