@@ -1,6 +1,6 @@
 ---
 id: 03-session-gauge
-status: review
+status: done
 branch: feat/m-c-session-gauge
 tier: small
 locked_at: 7e85a95
@@ -36,3 +36,5 @@ The agent is told when a session reaches the SES-2 tool-call limit, so it hands 
 - Unverified: `additionalContext` delivery depends on the Claude Code version; check the hooks reference.
 
 ## Handoffs
+
+- `docs/handoffs/20261124-1325-03-session-gauge.md`
