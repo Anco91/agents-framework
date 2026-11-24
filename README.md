@@ -82,6 +82,9 @@ First action: implement periodToRange in packages/shared/src/domain/period.ts
 **Équipe autonome** : un PM (`agents-fw-pm`) mène un kickoff par change, tranche lui-même avec
 l'option recommandée et ne s'arrête qu'aux portes GIT-7 (`framework/rules/autonomy.md`).
 
+**Sessions enchaînées** : `relay.sh` relance une session neuve avec le dernier handoff, jusqu'à la
+fin ou une porte humaine (`AGENTS_FW_RELAY_CMD`, voir le guide).
+
 Handoff obligatoire quand une sous-spec est livrée (commit + PR), et aussi après ~30 échanges,
 ~40 appels d'outils, 3 échecs identiques, un fichier hors Cadre ou un test qui semble faux.
 

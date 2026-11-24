@@ -1,0 +1,2 @@
+# SC2016: tests write literal shell snippets into stub scripts on purpose.
+disable=SC2016

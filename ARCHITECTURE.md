@@ -34,6 +34,7 @@ Checked by `bash framework/scripts/arch-check.sh ARCHITECTURE.md`.
 | `framework/scripts/lint-docs.sh` | file | Line budgets, rule IDs, links, handoff block |
 | `framework/scripts/new-handoff.sh` | file | Handoff file generator |
 | `framework/scripts/test-lock.sh` | file | Locked-test integrity gate |
+| `framework/scripts/relay.sh` | file | Headless next-session loop from the latest handoff |
 | `framework/scripts/session-gauge.sh` | file | Tool-call counter, warns at the SES-2 limit |
 | `init.sh` | file | Installer and updater |
 | `framework/core.md` | file | Managed project block |
@@ -58,3 +59,4 @@ Checked by `bash framework/scripts/arch-check.sh ARCHITECTURE.md`.
 | 2026-11-24 | Sub-spec 08 (changes log) is dropped; OpenSpec coexistence (09) is documentation only | The Decisions table is already the changes log and `arch-check.sh` already enforces the registry; the installer never touches `openspec/` and never calls `npx` |
 | 2026-11-24 | OpenSpec is the default spec workflow (10); supersedes 09 "documentation only". Sub-spec = OpenSpec change + `frame.md`; `init.sh` still never touches `openspec/` or calls `npx` | The human asked for OpenSpec by default; the agent runs `openspec init`, the installer stays offline and idempotent |
 | 2026-11-24 | A PM role decides in place of the human (AUTO-1..6); human gates stay exactly the GIT-7 list | The human asked for an autonomous team; they nearly always took the recommended option |
+| 2026-11-24 | A running session cannot restart itself; continuation is an outer `relay.sh` loop started by the human, host command from `AGENTS_FW_RELAY_CMD` | No host exposes a safe self-reset; a bypass-permissions default is forbidden |

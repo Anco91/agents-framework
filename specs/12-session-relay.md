@@ -1,9 +1,9 @@
 ---
 id: 12-session-relay
-status: ready
+status: review
 branch: feat/12-session-relay
 tier: medium
-locked_at:
+locked_at: cec4c41
 locked_tests:
   - tests/test_relay.sh
 ---

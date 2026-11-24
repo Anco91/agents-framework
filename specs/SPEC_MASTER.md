@@ -44,5 +44,5 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | 09 | `specs/09-openspec-bridge.md` | Documentation-only bridge to OpenSpec; `init.sh` never calls `npx` | done | — |
 | 10 | `specs/10-openspec-default.md` | OpenSpec is the default spec workflow; sub-spec = change + `frame.md` | review | — |
 | 11 | `specs/11-autonomous-team.md` | Autonomous team: PM role, kickoff, no human choice prompts (AUTO) | review | — |
-| 12 | — | `relay.sh`: start the next session from the latest handoff, headless | draft | — |
+| 12 | `specs/12-session-relay.md` | `relay.sh`: start the next session from the latest handoff, headless | review | — |
 | 13 | — | Terse chat replies, `caveman` skill loaded by default | draft | — |

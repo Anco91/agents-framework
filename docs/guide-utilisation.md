@@ -302,6 +302,23 @@ Marche à suivre :
 3. Après `archive`, OpenSpec déplace le dossier vers `openspec/changes/archive/<date>-<id>/` : mettre à
    jour le chemin du master dans le même commit. L'`id` ne change jamais.
 
+## Enchaîner les sessions sans toi
+
+Une session ne peut pas se « /new » elle-même : aucun script lancé depuis la session ne remplace
+l'écran en cours. Ce qui marche : une boucle **extérieure**, lancée une fois par toi, qui démarre un
+`claude -p` neuf pour chaque session, avec le bloc `NEXT SESSION` du dernier handoff.
+
+```bash
+export AGENTS_FW_RELAY_CMD='claude -p --permission-mode acceptEdits --allowedTools "Bash(git:*) Bash(gh:*) Bash(bash:*) Bash(openspec:*) Edit Write Read"'
+bash .agents-fw/scripts/relay.sh --max 10
+```
+
+Pas de `--dangerously-skip-permissions` : liste les outils autorisés. Ajuster les outils au projet.
+La boucle s'arrête quand le bloc contient `Stop: done` ou `Stop: human-gate: <raison>`, que tout le
+master est `done`, qu'une session n'a écrit aucun nouveau handoff, que `.agents-fw/STOP` existe ou
+après `--max` sessions. Code de sortie : 0 fini ou en attente de toi, 3 pas de progrès, 4 max atteint,
+5 commande en échec.
+
 ## 12. Protections de coût
 
 - Une clé OpenRouter par outil, avec plafond de crédit.
