@@ -5,6 +5,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 ## [Unreleased]
 
 ### Added
+- Claude host: `agents-fw-executor` (sonnet), `agents-fw-executor-small` (haiku), `agents-fw-reviewer`;
+  `tier: small|medium` in the sub-spec header; ROLE-9 (named agents only, no inherited strong model).
+- `core.md`: host global rules do not override TEST-1..3 or the role split.
 - `docs/guide-utilisation.md`: installation, first sub-spec, Executor/Reviewer sessions, updates and troubleshooting.
 
 ## [1.0.0] — 2026-11-23

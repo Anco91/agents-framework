@@ -1,8 +1,8 @@
 ---
 id: 02-agent-tiers
-status: in-progress
+status: review
 branch: feat/m-a-agent-tiers
-locked_at:
+locked_at: 16d47e9
 locked_tests:
   - tests/test_hosts.sh
 tier: medium
