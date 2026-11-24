@@ -53,3 +53,10 @@ Three roles, defined by capability. One human validates. Cite rules by ID.
   sub-spec header: `small` = one file or a mechanical change, `medium` = the rest. Check that
   `CLAUDE_CODE_SUBAGENT_MODEL` is unset, since it can override an agent's `model:`.
   Why: a sub-agent without an explicit model runs on the strong Advisor model and costs 5-10x more.
+
+- **ROLE-10 MUST** — Code follows the project's House style (`ARCHITECTURE.md` > House style). The
+  Advisor names the exemplar to copy per new file in the Frame ("Style exemplars"). The Reviewer
+  compares every new or changed file with that exemplar and the listed conventions, and reports each
+  gap as a blocking `ROLE-10` finding. Reference code in `.agents-fw/standards/reference` is a model,
+  not a replacement: the project's own style wins when they differ.
+  Why: code that works but reads differently from the rest makes the project harder to navigate.

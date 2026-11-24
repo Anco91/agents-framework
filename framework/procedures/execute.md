@@ -5,7 +5,8 @@ Rules: ROLE-2..4, CTX-1..4, TEST-5, GIT-1, SES-1, SES-2.
 
 1. Read `AGENTS.md`, `ARCHITECTURE.md`, the sub-spec (or the handoff). Nothing else yet.
 2. `git switch -c <branch from header>` (or switch to it). Set status `in-progress`.
-3. Read only the Read list and the standard sections cited in the Frame.
+3. Read only the Read list and the standard sections cited in the Frame, plus the Frame's style
+   exemplar. Write new files in that style (ROLE-10).
 4. Implement file by file, in the order of the Frame. Exact paths, names and signatures.
    - Reuse what the Frame lists; use the libraries it lists.
    - Need a file outside the Frame, a new dependency, or a different signature: stop, handoff

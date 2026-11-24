@@ -45,6 +45,10 @@ Master: `specs/SPEC_MASTER.md` · Rules: WF-3, WF-7, ROLE-1..4, TEST-1..5
 
 - `path/to/registered/helper.ts` — <why it fits>
 
+### Style exemplars
+
+- `path/to/exemplar.ts` — <the House style exemplar to copy for each new file; ROLE-10>
+
 ### Libraries
 
 - <library> — <what it is used for here>
