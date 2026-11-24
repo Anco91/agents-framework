@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          { "type": "command", "command": ".agents-fw/scripts/session-gauge.sh --hook" }
+        ]
+      }
+    ]
+  }
+}
