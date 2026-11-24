@@ -1,6 +1,6 @@
 ---
 id: 06-adopt-existing
-status: ready
+status: done
 branch: feat/06-adopt-existing
 locked_at: 9c1aaad
 locked_tests:
