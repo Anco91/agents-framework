@@ -35,3 +35,8 @@ Context is the first cost. Read little, read the right thing, never scan. Cite r
 - **CTX-7 MUST** — Use up-to-date library docs (Context7 or the official docs) when writing code
   against a library API. Never rely on the model's memory for an API signature.
   Why: model memory is months old; library APIs are not.
+
+- **CTX-8 SHOULD** — Pick tools in this order: the registry in `ARCHITECTURE.md`, then a ranged read
+  or LSP / Serena (CTX-6), then a search limited to a declared folder (CTX-2), then Context7 or the
+  official docs for library APIs (CTX-7). Move to the next step only when the previous one fails.
+  Why: each step costs more context than the one before it.

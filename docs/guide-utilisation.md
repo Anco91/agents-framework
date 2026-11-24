@@ -264,6 +264,23 @@ git log --grep "Track: fast"
 
 Tout le reste passe par une sous-spec.
 
+## Politique d'outils
+
+Ordre de choix (CTX-8) : registre de `ARCHITECTURE.md`, puis lecture par plage ou LSP/Serena, puis
+recherche limitée à un dossier déclaré, puis Context7 ou la doc officielle pour les API de
+bibliothèques.
+
+Avec l'hôte `claude`, `init.sh` copie deux exemples dans `.agents-fw/adapters/claude/` :
+`settings.example.json` (clé `permissions.deny`) et `mcp.example.json` (serveur Context7). Le cadre
+ne crée ni ne modifie jamais `.claude/settings.json` ni `.mcp.json`. Fusion à la main, sans `jq` :
+
+1. Ouvrir `.claude/settings.json` (le créer s'il n'existe pas).
+2. Copier le tableau `deny` de l'exemple dans `permissions.deny`, en gardant vos entrées existantes.
+3. Copier l'entrée `context7` de `mcp.example.json` dans `mcpServers` de `.mcp.json`.
+4. Vérifier que chaque fichier reste du JSON valide (virgules, accolades).
+
+Kilo et Aider ne sont pas couverts par cette politique.
+
 ## 12. Protections de coût
 
 - Une clé OpenRouter par outil, avec plafond de crédit.
