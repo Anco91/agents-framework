@@ -71,7 +71,8 @@ Frame needed; locked test looks wrong; ~30 exchanges; ~40 tool calls; context ga
 2. Update the master index row and the sub-spec "Handoffs" section; commit.
 3. End with the resume block from `.agents-fw/procedures/handoff.md`, filled, nothing after it.
 
-Never compact a long session; hand off and start fresh (SES-6).
+Never compact a long session; hand off and start fresh (SES-6). Unattended: the human starts
+`.agents-fw/scripts/relay.sh` once; it opens each next session from the handoff (SES-9).
 
 ## Where to look
 
