@@ -1,6 +1,6 @@
 ---
 id: 11-autonomous-team
-status: review
+status: done
 branch: feat/11-autonomous-team
 tier: medium
 locked_at: a28fb53
