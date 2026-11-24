@@ -1,6 +1,6 @@
 ---
 id: 12-session-relay
-status: review
+status: done
 branch: feat/12-session-relay
 tier: medium
 locked_at: cec4c41

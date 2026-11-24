@@ -1,6 +1,6 @@
 ---
 id: 10-openspec-default
-status: review
+status: done
 branch: feat/10-openspec-default
 tier: medium
 locked_at: b6120ca
