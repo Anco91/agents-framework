@@ -2,6 +2,7 @@
 id: NN-slug
 status: draft
 branch: feat/NN-slug
+tier: medium
 locked_at:
 locked_tests: []
 ---
