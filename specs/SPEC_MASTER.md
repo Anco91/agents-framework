@@ -37,3 +37,6 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | 01 | `specs/01-lint-docs-line-count.md` | Line budgets count an unterminated last line | done | `docs/handoffs/20261123-0108-01-lint-docs-line-count.md` |
 | 02 | `specs/02-agent-tiers.md` | Claude Executor/Reviewer agents with model tier aliases; `tier:` in sub-specs | done | `docs/handoffs/20261124-1315-02-agent-tiers.md` |
 | 03 | `specs/03-session-gauge.md` | Tool-call counter warns at the SES-2 limit | done | `docs/handoffs/20261124-1325-03-session-gauge.md` |
+| 04 | `specs/04-autonomous-flow.md` | GIT-7: commit, push, merge on green; human gates only | done | — |
+| 05 | `specs/05-style-review.md` | Reviewer checks code against project house style and exemplars | draft | — |
+| 06 | `specs/06-adopt-existing.md` | `init.sh adopt`: replace existing rules/skills with the framework, with backup | draft | — |
