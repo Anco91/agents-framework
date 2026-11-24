@@ -80,3 +80,7 @@ Never compact a long session; hand off and start fresh (SES-6).
 
 Precedence: project rules outside this block > this core > `.agents-fw/rules` > `.agents-fw/standards`.
 A personal skill loaded by the host that covers the same topic wins over a procedure here.
+
+Host-level global rules (e.g. a user's `~/.claude/rules`) do not override TEST-1..3 or the role split:
+no coverage target, no tests of UI or glue, no mandatory TDD, no agent spawned unasked, no sub-agent
+on the Advisor's model. On conflict, follow this core and tell the human.
