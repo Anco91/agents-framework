@@ -175,6 +175,8 @@ list_static_host_pairs() {
         for claude_agent in agents-fw-executor agents-fw-executor-small agents-fw-reviewer; do
           printf '%s\t.claude/agents/%s.md\n' "$SCRIPT_DIR/adapters/claude/agents/$claude_agent.md" "$claude_agent"
         done
+        printf '%s\t.agents-fw/adapters/claude/settings.example.json\n' "$SCRIPT_DIR/adapters/claude/settings.example.json"
+        printf '%s\t.agents-fw/adapters/claude/mcp.example.json\n' "$SCRIPT_DIR/adapters/claude/mcp.example.json"
         ;;
       kilo)
         printf '%s\t.kilo/agents/agents-fw-advisor.md\n' "$SCRIPT_DIR/adapters/kilo/agents-fw-advisor.md"
@@ -208,7 +210,7 @@ list_managed_pairs() {
 }
 
 print_hosts() {
-  printf 'claude: CLAUDE.md, .claude/agents/agents-fw-executor.md, .claude/agents/agents-fw-executor-small.md, .claude/agents/agents-fw-reviewer.md\n'
+  printf 'claude: CLAUDE.md, .claude/agents/agents-fw-executor.md, .claude/agents/agents-fw-executor-small.md, .claude/agents/agents-fw-reviewer.md, .agents-fw/adapters/claude/settings.example.json, .agents-fw/adapters/claude/mcp.example.json\n'
   printf 'kilo: .kilo/agents/agents-fw-advisor.md, .kilo/agents/agents-fw-executor.md, .agents-fw/adapters/kilo/kilo.jsonc.example\n'
   printf 'aider: .aider.conf.yml\n'
   for procedure_file in "$FRAMEWORK_DIR"/procedures/*.md; do

@@ -54,3 +54,4 @@ Checked by `bash framework/scripts/arch-check.sh ARCHITECTURE.md`.
 | 2026-11-23 | This repository runs its own scripts from `framework/scripts/` and does not vendor a generated `.agents-fw/` copy | The framework directory is the source of truth; a second copy would drift |
 | 2026-11-23 | Self-hosted sub-specs live under `specs/`; handoffs under `docs/handoffs/` | Dogfood the workflow described in the framework |
 | 2026-11-24 | `init.sh adopt` moves existing agent rules to `.agents-fw/backup/<timestamp>/`, never deletes, never touches `settings.json`, `.mcp.json` or `~/.claude` | Adoption must be reversible with plain `mv`; user config is not ours to edit |
+| 2026-11-24 | Claude permission and MCP examples are shipped under `.agents-fw/adapters/claude/`; the framework never merges them into user config | `settings.json` and `.mcp.json` belong to the user; merging needs a human gate (GIT-7) |

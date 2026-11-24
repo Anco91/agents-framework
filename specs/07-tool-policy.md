@@ -1,6 +1,6 @@
 ---
 id: 07-tool-policy
-status: ready
+status: done
 branch: feat/07-tool-policy
 locked_at: 7bea182
 locked_tests:
@@ -97,6 +97,7 @@ Proof of failure: `bash tests/test_tool_policy.sh` → `FAIL: expected .../frame
 
 | Test | Reason | Proposal | Decision |
 |---|---|---|---|
+| `tests/test_tool_policy.sh` line 11 (via `tests/lib.sh` `assert_file_contains`) | The needle `- **CTX-8 SHOULD**` starts with a dash, and `assert_file_contains` runs `grep -F "$needle"` without `--`. BSD and GNU grep read the needle as an option (`invalid option -- `), so the assertion fails even though the line is present in `context.md`. | Change `tests/lib.sh` `assert_file_contains` to `grep -F -- "$needle" "$file"` (and the sibling helpers that take a needle). `tests/test_tool_policy.sh` stays untouched. | accepted: Advisor fixed the needle in the test (no `lib.sh` change); re-locked at 7bea182 |
 
 ## Out of scope
 
