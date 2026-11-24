@@ -51,6 +51,42 @@ Ce que l'installation fait :
 - crée `ARCHITECTURE.md`, `specs/SPEC_MASTER.md` et `docs/handoffs/` s'ils manquent ;
 - ne touche pas au reste de `AGENTS.md`, ni à `openspec/`, ni à `skills/`.
 
+## Adopter dans un projet existant
+
+Un projet qui a déjà des règles d'agent (Claude, Cursor, Kilo, Copilot, Aider) passe au cadre sans rien perdre.
+
+```bash
+./init.sh adopt /chemin/vers/projet --host claude          # simulation : ne change aucun fichier
+./init.sh adopt /chemin/vers/projet --host claude --apply  # sauvegarde puis installe
+```
+
+La simulation affiche `would move <chemin>` pour chaque élément, `left alone` pour `.claude/settings.json` et
+`.mcp.json`, puis le contenu des fichiers concernés : l'Advisor y reprend les faits du projet (build, stack,
+domaine) dans `ARCHITECTURE.md`. Avec `--apply`, chaque élément est déplacé (jamais supprimé) vers
+`.agents-fw/backup/<horodatage>/` avec le même chemin relatif, puis l'installation habituelle s'exécute.
+Un second `--apply` n'a rien à déplacer : `nothing to adopt`.
+
+Éléments déplacés : `CLAUDE.md`, le contenu de `.claude/rules`, `.claude/agents` et `.claude/skills`,
+`.cursorrules`, le contenu de `.cursor/rules` et `.kilocode/rules`, `.github/copilot-instructions.md`,
+`CONVENTIONS.md`. Les noms en `agents-fw-` et un `CLAUDE.md` identique à celui du cadre sont ignorés.
+
+### Étapes manuelles (jamais touchées par `adopt`)
+
+- `.claude/settings.json` : ouvrir le fichier et ajouter à la main le hook PostToolUse de
+  `adapters/claude/settings.example.json` (clé `hooks`), sans écraser vos permissions. Pas de `jq` requis.
+- `.mcp.json` : conservé tel quel ; vérifier simplement que les serveurs MCP restent valides.
+- `~/.claude` (règles globales) : non modifié. Ces règles ne remplacent pas TEST-1..3 ni la séparation des rôles
+  (voir `core.md`) ; retirez celles qui les contredisent.
+
+### Nouveau projet
+
+Pas de fichiers existants : `./init.sh install /chemin/vers/projet`, puis la section 2.
+
+### Restaurer
+
+La sauvegarde est faite de fichiers ordinaires : `mv .agents-fw/backup/<horodatage>/<chemin> <chemin>` pour
+remettre un fichier à sa place d'origine.
+
 ## 3. Vérifier l'installation
 
 ```bash

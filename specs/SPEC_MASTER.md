@@ -39,4 +39,4 @@ can implement a slice without searching the workspace, and a strong Advisor keep
 | 03 | `specs/03-session-gauge.md` | Tool-call counter warns at the SES-2 limit | done | `docs/handoffs/20261124-1325-03-session-gauge.md` |
 | 04 | `specs/04-autonomous-flow.md` | GIT-7: commit, push, merge on green; human gates only | done | — |
 | 05 | `specs/05-style-review.md` | Reviewer checks code against project house style and exemplars | done | `docs/handoffs/20261124-1436-05-style-review.md` |
-| 06 | `specs/06-adopt-existing.md` | `init.sh adopt`: replace existing rules/skills with the framework, with backup | draft | — |
+| 06 | `specs/06-adopt-existing.md` | `init.sh adopt`: replace existing rules/skills with the framework, with backup | done | — |
