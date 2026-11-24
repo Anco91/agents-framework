@@ -2,7 +2,7 @@
 id: 07-tool-policy
 status: ready
 branch: feat/07-tool-policy
-locked_at:
+locked_at: 35bee6f
 locked_tests:
   - tests/test_tool_policy.sh
 tier: medium
