@@ -174,17 +174,17 @@ Le script échoue si un test verrouillé a changé depuis `locked_at`.
 
 ## 7. Valider la sous-spec
 
-C'est le seul point de contrôle humain obligatoire avant l'exécution. Vérifier :
+Plus d'étape humaine : le **PM** valide après le kickoff (`procedures/kickoff.md`). Trois voix
+(Produit, Architecte, Sceptique) écrivent quelques lignes dans `design.md`, le PM tranche en
+choisissant l'option recommandée (AUTO-1, AUTO-6). Tu n'es sollicité que pour les portes GIT-7
+(test verrouillé modifié, auth/secrets/CI, migration, suppression de fichier étranger, release).
 
-- le résultat attendu est observable et petit ;
-- le Cadre liste tous les fichiers nécessaires ;
-- les tests couvrent chaque critère d'acceptation ;
-- rien d'important n'est hors périmètre.
-
-Puis créer un handoff vers l'Executor :
+Lancer l'équipe : `claude --agent agents-fw-pm`, puis donner l'objectif. Le PM enchaîne
+explorer → proposer → kickoff → tests → Executor → revue → merge (`procedures/pm-loop.md`).
+Pour lancer l'Executor à la main, créer un handoff :
 
 ```bash
-bash .agents-fw/scripts/new-handoff.sh specs/01-<slug>.md
+bash .agents-fw/scripts/new-handoff.sh openspec/changes/<id>/frame.md
 ```
 
 Remplir le fichier produit dans `docs/handoffs/`, puis coller le bloc final dans une session
@@ -193,8 +193,8 @@ neuve :
 ```text
 NEXT SESSION
 Role: executor
-Read: AGENTS.md, ARCHITECTURE.md, docs/handoffs/<date>-01-<slug>.md
-Sub-spec: specs/01-<slug>.md (master: specs/SPEC_MASTER.md)
+Read: AGENTS.md, ARCHITECTURE.md, docs/handoffs/<date>-<id>.md
+Sub-spec: openspec/changes/<id>/frame.md (master: specs/SPEC_MASTER.md)
 First action: <une phrase>
 ```
 

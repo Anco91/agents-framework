@@ -1,9 +1,9 @@
 ---
 id: 11-autonomous-team
-status: ready
+status: review
 branch: feat/11-autonomous-team
 tier: medium
-locked_at:
+locked_at: a28fb53
 locked_tests:
   - tests/test_autonomous_team.sh
 ---

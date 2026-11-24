@@ -7,6 +7,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 Sub-specs 02 to 07 and 09 are delivered; 08 was dropped (the Decisions table is the changes log).
 
 ### Added
+- Autonomous team (11): `rules/autonomy.md` (AUTO-1..6), ROLE-11 PM, `procedures/kickoff.md`, `procedures/pm-loop.md`, Claude agent `agents-fw-pm`. The human no longer validates or chooses; WF-1, WF-7, ROLE-3, ROLE-4 route to the PM/Advisor. GIT-7 gates unchanged.
 - OpenSpec is the default spec workflow (WF-9, 10): a sub-spec is an OpenSpec change plus a `frame.md`; new `procedures/openspec-flow.md` and `templates/FRAME.md`. `init.sh` still never touches `openspec/`.
 - CTX-8: tool order (registry, ranged read or LSP, folder-limited search, library docs). Claude host ships `settings.example.json` with `permissions.deny` and `mcp.example.json` (Context7) in `.agents-fw/adapters/claude/`; user config is never edited.
 - `init.sh adopt <project> [--host <list>] [--apply]`: dry-run plan, then backup to `.agents-fw/backup/<timestamp>/` and install; never deletes.

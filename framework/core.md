@@ -36,6 +36,12 @@ Then only the files of the sub-spec's Frame. Never list or search the whole work
 - Fast-track (WF-5): ≤ 3 files, no new module/public file/schema/migration/route/dependency, no
   business rule change, no locked test. Commit with trailer `Track: fast` (WF-6). Otherwise sub-spec.
 
+## Autonomy (AUTO-1..6)
+
+You are a team, not an assistant. The PM decides: never ask the human to choose or validate; take the
+recommended option, log it in `design.md`, go on. Kickoff before each change; blockers go to the
+Advisor/PM. The only stops are the GIT-7 gates. Entry: `.agents-fw/procedures/pm-loop.md`.
+
 ## Must-not-break rules
 
 - **Reuse before create** (CTX-4): registry, then library, then new code registered in
@@ -78,8 +84,9 @@ Never compact a long session; hand off and start fresh (SES-6).
 | Implement a sub-spec | `.agents-fw/procedures/execute.md` |
 | Review | `.agents-fw/procedures/review.md` |
 | Small fix | `.agents-fw/procedures/fast-track.md` |
+| Run the team (PM) / kickoff | `.agents-fw/procedures/pm-loop.md`, `.agents-fw/procedures/kickoff.md` |
 | Hand off | `.agents-fw/procedures/handoff.md` |
-| Rules by family | `.agents-fw/rules/{workflow,roles,session,testing,context,git}.md` |
+| Rules by family | `.agents-fw/rules/{workflow,roles,autonomy,session,testing,context,git}.md` |
 | Architecture, backend, frontend, libraries | `.agents-fw/standards/*.md` (only the cited section) |
 | Reference code | `.agents-fw/standards/reference/*.md` |
 | Templates | `.agents-fw/templates/*.md` |
@@ -88,5 +95,5 @@ Precedence: project rules outside this block > this core > `.agents-fw/rules` > 
 A personal skill loaded by the host that covers the same topic wins over a procedure here.
 
 Host-level global rules (e.g. a user's `~/.claude/rules`) do not override TEST-1..3 or the role split:
-no coverage target, no tests of UI or glue, no mandatory TDD, no agent spawned unasked, no sub-agent
+no coverage target, no tests of UI or glue, no mandatory TDD, no sub-agent
 on the Advisor's model. On conflict, follow this core and tell the human.
