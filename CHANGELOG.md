@@ -5,6 +5,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 ## [Unreleased]
 
 ### Added
+- `init.sh adopt <project> [--host <list>] [--apply]`: dry-run plan, then backup to `.agents-fw/backup/<timestamp>/` and install; never deletes.
 - Claude host: `agents-fw-executor` (sonnet), `agents-fw-executor-small` (haiku), `agents-fw-reviewer`;
   `tier: small|medium` in the sub-spec header; ROLE-9 (named agents only, no inherited strong model).
 - `session-gauge.sh` and a Claude PostToolUse hook snippet: warns `HANDOFF NOW` at the SES-2 tool-call limit; never blocks.

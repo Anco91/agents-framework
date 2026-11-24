@@ -12,13 +12,15 @@ OLD_HOSTS=''
 NORMALIZED_HOSTS=''
 HOSTS_SPECIFIED=0
 HOST_STAGE_DIR=''
+APPLY=0
+ADOPT_ITEMS=''
 
 error() {
   printf '%s\n' "$*" >&2
 }
 
 usage() {
-  error "usage: init.sh install|update <project> [--force] [--host <list>] | init.sh hosts"
+  error "usage: init.sh install|update <project> [--force] [--host <list>] | init.sh adopt <project> [--host <list>] [--apply] | init.sh hosts"
 }
 
 normalize_host_list() {
@@ -705,6 +707,90 @@ write_manifest() {
   MANIFEST_TMP=''
 }
 
+list_adopt_children() {
+  child_dir=$1
+  [ -d "$PROJECT/$child_dir" ] || return 0
+  find "$PROJECT/$child_dir" -mindepth 1 -maxdepth 1 -print 2>/dev/null | LC_ALL=C sort |
+    while IFS= read -r child_path; do
+      child_name=${child_path##*/}
+      case "$child_name" in
+        agents-fw-*) continue ;;
+      esac
+      printf '%s/%s\n' "$child_dir" "$child_name"
+    done
+}
+
+list_adopt_items() {
+  ADOPT_ITEMS=''
+  adopt_found=''
+  if [ -f "$PROJECT/CLAUDE.md" ] && ! cmp -s "$PROJECT/CLAUDE.md" "$SCRIPT_DIR/adapters/claude/CLAUDE.md"; then
+    adopt_found=CLAUDE.md
+  fi
+  for adopt_dir in .claude/rules .claude/agents .claude/skills; do
+    adopt_found="$adopt_found
+$(list_adopt_children "$adopt_dir")"
+  done
+  if [ -e "$PROJECT/.cursorrules" ]; then
+    adopt_found="$adopt_found
+.cursorrules"
+  fi
+  for adopt_dir in .cursor/rules .kilocode/rules; do
+    adopt_found="$adopt_found
+$(list_adopt_children "$adopt_dir")"
+  done
+  for adopt_file in .github/copilot-instructions.md CONVENTIONS.md; do
+    [ -e "$PROJECT/$adopt_file" ] && adopt_found="$adopt_found
+$adopt_file"
+  done
+  ADOPT_ITEMS=$(printf '%s\n' "$adopt_found" | sed '/^$/d')
+  while IFS= read -r adopt_item; do
+    [ -n "$adopt_item" ] || continue
+    safe_relative_path "$adopt_item" || return 1
+    check_path_links "$adopt_item" || return 1
+  done <<< "$ADOPT_ITEMS"
+}
+
+print_adopt_plan() {
+  while IFS= read -r adopt_item; do
+    [ -n "$adopt_item" ] || continue
+    printf 'would move  %s\n' "$adopt_item"
+  done <<< "$ADOPT_ITEMS"
+  for adopt_file in .claude/settings.json .mcp.json; do
+    [ -e "$PROJECT/$adopt_file" ] && printf 'left alone  %s\n' "$adopt_file"
+  done
+  while IFS= read -r adopt_item; do
+    [ -n "$adopt_item" ] || continue
+    while IFS= read -r adopt_path; do
+      printf '\n--- %s ---\n' "${adopt_path#"$PROJECT"/}"
+      cat "$adopt_path"
+    done < <(find "$PROJECT/$adopt_item" -type f -print 2>/dev/null | LC_ALL=C sort)
+  done <<< "$ADOPT_ITEMS"
+  printf '\nRe-run with --apply to back up these files and install the framework.\n'
+}
+
+apply_adopt() {
+  adopt_stamp=$(date +%Y%m%d-%H%M%S)
+  adopt_backup="$PROJECT/.agents-fw/backup/$adopt_stamp"
+  adopt_suffix=0
+  while [ -e "$adopt_backup" ]; do
+    adopt_suffix=$((adopt_suffix + 1))
+    adopt_backup="$PROJECT/.agents-fw/backup/$adopt_stamp-$adopt_suffix"
+  done
+  while IFS= read -r adopt_item; do
+    [ -n "$adopt_item" ] || continue
+    mkdir -p "$(dirname "$adopt_backup/$adopt_item")" 2>/dev/null || {
+      error "cannot create backup directory for: $adopt_item"
+      return 1
+    }
+    mv "$PROJECT/$adopt_item" "$adopt_backup/$adopt_item" 2>/dev/null || {
+      error "cannot move to backup: $adopt_item"
+      return 1
+    }
+    printf 'moved  %s\n' "$adopt_item"
+  done <<< "$ADOPT_ITEMS"
+  printf 'backup  %s\n' "${adopt_backup#"$PROJECT"/}"
+}
+
 main() {
   if [ "$#" -eq 1 ] && [ "$1" = hosts ]; then
     print_hosts
@@ -721,6 +807,7 @@ main() {
   HOSTS=''
   OLD_HOSTS=''
   HOSTS_SPECIFIED=0
+  APPLY=0
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --force)
@@ -744,6 +831,14 @@ main() {
         HOSTS_SPECIFIED=1
         shift 2
         ;;
+      --apply)
+        [ "$action" = adopt ] && [ "$APPLY" -eq 0 ] || {
+          usage
+          return 1
+        }
+        APPLY=1
+        shift
+        ;;
       *)
         usage
         return 1
@@ -751,10 +846,21 @@ main() {
     esac
   done
   case "$action" in
-    install|update) ;;
+    install|update|adopt) ;;
     *) usage; return 1 ;;
   esac
   resolve_project "$project_arg" || return 1
+  if [ "$action" = adopt ]; then
+    list_adopt_items || return 1
+    if [ -z "$ADOPT_ITEMS" ]; then
+      printf 'nothing to adopt\n'
+    elif [ "$APPLY" -eq 0 ]; then
+      print_adopt_plan
+    else
+      apply_adopt || return 1
+    fi
+    [ "$APPLY" -eq 1 ] || return 0
+  fi
   validate_sources || return 1
   for relative_path in .agents-fw AGENTS.md ARCHITECTURE.md specs specs/SPEC_MASTER.md docs docs/handoffs docs/handoffs/.gitkeep; do
     check_path_links "$relative_path" || return 1
