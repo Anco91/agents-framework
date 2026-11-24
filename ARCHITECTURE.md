@@ -55,3 +55,4 @@ Checked by `bash framework/scripts/arch-check.sh ARCHITECTURE.md`.
 | 2026-11-23 | Self-hosted sub-specs live under `specs/`; handoffs under `docs/handoffs/` | Dogfood the workflow described in the framework |
 | 2026-11-24 | `init.sh adopt` moves existing agent rules to `.agents-fw/backup/<timestamp>/`, never deletes, never touches `settings.json`, `.mcp.json` or `~/.claude` | Adoption must be reversible with plain `mv`; user config is not ours to edit |
 | 2026-11-24 | Claude permission and MCP examples are shipped under `.agents-fw/adapters/claude/`; the framework never merges them into user config | `settings.json` and `.mcp.json` belong to the user; merging needs a human gate (GIT-7) |
+| 2026-11-24 | Sub-spec 08 (changes log) is dropped; OpenSpec coexistence (09) is documentation only | The Decisions table is already the changes log and `arch-check.sh` already enforces the registry; the installer never touches `openspec/` and never calls `npx` |

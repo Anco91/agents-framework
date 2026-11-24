@@ -1,6 +1,6 @@
 ---
 id: 09-openspec-bridge
-status: ready
+status: done
 branch: feat/09-openspec-bridge
 locked_at: 2e8588b
 locked_tests:

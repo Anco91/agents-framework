@@ -14,6 +14,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: se
 - ROLE-10: House style section in `ARCHITECTURE.md`, "Style exemplars" in the Frame; the Reviewer blocks code that drifts from the project's style.
 - `core.md`: host global rules do not override TEST-1..3 or the role split.
 - `docs/guide-utilisation.md`: installation, first sub-spec, Executor/Reviewer sessions, updates and troubleshooting.
+- `docs/guide-utilisation.md`: section "Coexister avec OpenSpec" (09). Documentation only: `init.sh` never touches `openspec/` and never calls `npx`.
 
 ## [1.0.0] — 2026-11-23
 
