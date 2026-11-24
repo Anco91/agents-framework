@@ -2,7 +2,7 @@
 id: 09-openspec-bridge
 status: done
 branch: feat/09-openspec-bridge
-locked_at: 2e8588b
+locked_at: 7f036b2
 locked_tests:
   - tests/test_openspec_bridge.sh
 tier: small
