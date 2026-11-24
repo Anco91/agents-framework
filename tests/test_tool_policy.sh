@@ -8,7 +8,7 @@ ROOT=$(CDPATH='' cd -- "$TEST_DIR/.." && pwd -P)
 new_project
 
 # The tool-order rule is delivered and cites the rules it orders.
-assert_file_contains "$ROOT/framework/rules/context.md" '- **CTX-8 SHOULD**'
+assert_file_contains "$ROOT/framework/rules/context.md" 'CTX-8 SHOULD'
 rule=$(awk '/^- \*\*CTX-8 /{f=1} f&&/^$/{exit} f{print}' "$ROOT/framework/rules/context.md")
 assert_contains "$rule" 'CTX-2'
 assert_contains "$rule" 'CTX-6'
